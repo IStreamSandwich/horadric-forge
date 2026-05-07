@@ -16,14 +16,6 @@ The idea is simple:
 
 This project is not meant to be a perfect simulation. It is more of a fun little crafting sandbox/challenge inspired by the general vibe of ARPG item systems.
 
-## Important Note
-
-I am not a professional coder.
-
-This project was made with a lot of help from ChatGPT. That means the code may not be written the way an experienced developer would structure it. It is currently a single HTML file with CSS and JavaScript included together.
-
-That said, building it was genuinely fun. I learned a lot while making it, and the goal was always to create something playable, understandable, and easy to share rather than something technically perfect.
-
 ## Features
 
 - Single-file HTML/CSS/JavaScript game.
