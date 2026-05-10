@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Horadric Forge Challenge</title>
+<style>
+:root{--gold:#c8a84a;--gold2:#7a5e28;--text:#c9bfa8;--muted:#8f8062;--bg:#090604;--panel:#17110c;--magic:#4a90d4;--rare:#d4c020;--leg:#d46a10;--green:#75c66a;--blue:#5a9ae0;--danger:#c87a5a}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at top,rgba(200,168,74,.14),transparent 32%),linear-gradient(180deg,#15100b,#070504 72%);color:var(--text);font-family:Georgia,'Times New Roman',serif}button,select,input{font:inherit}.app{max-width:1860px;margin:0 auto;padding:12px 18px 30px}header{border:1px solid var(--gold2);background:linear-gradient(180deg,rgba(36,26,16,.96),rgba(12,9,6,.96));padding:12px;text-align:center;box-shadow:0 0 35px rgba(0,0,0,.65)}h1{margin:0;color:var(--gold);font-size:clamp(1.7rem,3vw,2.8rem);letter-spacing:2px}header p{margin:6px 0 0;color:var(--muted)}.topbar{display:grid;grid-template-columns:repeat(8,minmax(105px,1fr));gap:10px;margin:10px 0}.card,.panel,.subpanel{border:1px solid var(--gold2);background:rgba(23,17,12,.94);box-shadow:0 0 22px rgba(0,0,0,.45);padding:12px}.layout{display:grid;grid-template-columns:230px 360px minmax(500px,1fr) 300px 300px;gap:14px;align-items:start}.panel{min-width:0}.inventory-panel,.craft-panel,.blacksmith-panel{align-self:start}.inventory-list{display:grid;gap:8px}.inventory-group{border:1px solid #3a2a15;background:#0d0905;padding:8px}.inventory-group h3{margin:0 0 7px;color:var(--gold);font-size:.92rem;letter-spacing:1px}.mat-row{display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:center;gap:8px;border-top:1px solid #2b2012;padding:6px 0;font-size:.8rem}.mat-row:first-of-type{border-top:0}.mat-row img{width:24px;height:24px;border:1px solid #4c3919}.mat-row span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mat-row b{color:var(--gold);font-size:.86rem}.mat-row.prism span{color:#cdbb91}.field{display:grid;gap:4px;color:var(--muted);font-size:.78rem}.field select,.field input{background:#100c08;color:var(--text);border:1px solid var(--gold2);padding:8px}.run-stat{display:grid;gap:4px;border:1px solid var(--gold2);background:#0e0a06;padding:8px;color:var(--muted);font-size:.78rem}.run-stat b{color:var(--text);font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.btn{border:1px solid var(--gold);background:linear-gradient(#d8bd66,#956c27);color:#160f07;padding:9px 12px;font-weight:bold;cursor:pointer;border-radius:3px}.btn.secondary{background:#120e09;color:var(--gold);border-color:var(--gold2)}.btn.danger{background:#2a100d;color:#f0b5a5;border-color:#804030}.btn:disabled{opacity:.5;cursor:not-allowed}.scorebox{display:grid;place-items:center;border:1px solid var(--gold2);background:#0e0a06;color:var(--gold);font-weight:bold;text-align:center}.scorebox small{color:var(--muted);font-weight:normal}.panel h2,.panel h3,.subpanel h3{margin:0 0 10px;color:var(--gold);letter-spacing:1px}.subtle{color:var(--muted);font-size:.86rem;line-height:1.35}.character{border:1px solid #3b2c16;background:radial-gradient(circle at 50% 45%,rgba(110,45,70,.35),transparent 34%),linear-gradient(180deg,#201746,#14100b);padding:12px;overflow:hidden}.character-layout{display:grid;grid-template-columns:minmax(108px,1fr) minmax(52px,.48fr) minmax(108px,1fr);gap:8px;align-items:start}.slot-column{display:flex;flex-direction:column;gap:10px;min-width:0}.silhouette{min-height:520px;border-radius:45% 45% 18% 18%;background:linear-gradient(180deg,rgba(210,190,160,.1),rgba(0,0,0,.25));border:1px solid rgba(200,168,74,.15);display:grid;place-items:center;color:rgba(200,168,74,.24);font-size:5rem}.gear-slot{border:1px solid #55401c;background:rgba(8,6,4,.78);padding:6px;cursor:pointer;border-radius:4px;min-height:62px;overflow:hidden;min-width:0}.gear-slot:hover,.gear-slot.active{border-color:var(--gold);box-shadow:0 0 12px rgba(200,168,74,.2)}.gear-slot.disabled{opacity:.28;cursor:not-allowed}.gear-slot .name{color:var(--gold);font-size:.83rem}.gear-slot .item{font-size:.74rem;color:var(--muted);line-height:1.25;margin-top:2px}.gear-slot .mini{margin-top:4px;font-size:.72rem;color:var(--text);display:flex;gap:4px;flex-wrap:wrap}.tag{display:inline-block;background:#0b0805;border:1px solid #403018;color:var(--muted);font-size:.68rem;padding:1px 4px;border-radius:2px}.tag.good{color:var(--green);border-color:#416d36}.tag.warn{color:var(--gold);border-color:var(--gold2)}.tag.bad{color:var(--danger);border-color:#7e3c2f}.materials{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.mat{display:flex;align-items:center;gap:6px;border:1px solid #3a2a15;background:#0e0a06;padding:6px;font-size:.72rem;min-width:0}.mat span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mat img{width:24px;height:24px;border:1px solid #4c3919;flex:0 0 auto}.mat b{margin-left:auto;color:var(--gold);flex:0 0 auto}.item-card{border:2px solid #666;background:linear-gradient(180deg,#15100b,#090604);padding:13px;min-height:390px}.item-card.common{border-color:#777}.item-card.magic{border-color:var(--magic)}.item-card.rare{border-color:var(--rare)}.item-card.legendary{border-color:var(--leg)}.item-head{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #3a2a15;padding-bottom:9px;margin-bottom:9px}.item-name{font-size:1.22rem;font-weight:bold}.commonTxt{color:#b0b0b0}.magicTxt{color:var(--magic)}.rareTxt{color:var(--rare)}.legendaryTxt{color:var(--leg)}.affix{border-left:3px solid var(--gold2);background:rgba(255,255,255,.025);padding:7px 9px;margin:7px 0;line-height:1.32}.affix.temp{border-left-color:var(--blue)}.affix.cap{outline:1px solid var(--gold)}.badge{display:inline-block;font-size:.68rem;color:#110b05;background:var(--gold);font-weight:bold;border-radius:2px;padding:1px 5px;margin-right:4px}.cat-Offensive{color:#e07070}.cat-Defensive{color:#70a0d0}.cat-Resource{color:#70c090}.cat-Mobility{color:#b070e0}.cat-Utility{color:#d0c070}.cat-CoreStat{color:#d0a070}.cat-Skill{color:#d070c0}.cat-Resistance{color:#70c0c0}.craft-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.recipe,.chip{border:1px solid #3a2a15;background:#100c08;color:var(--muted);padding:8px;cursor:pointer;border-radius:4px;text-align:left}.recipe.active,.chip.active{border-color:var(--gold);color:var(--gold);background:#21170d}.recipe strong{display:block;color:var(--gold);font-size:.88rem}.recipe span{font-size:.76rem;line-height:1.25}.prisms{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.chip img{width:24px;height:24px;vertical-align:middle;margin-right:5px}.actions{display:grid;gap:8px;margin-top:10px}.log{max-height:150px;overflow:auto;background:#090604;border:1px solid #3a2a15;padding:8px;font-family:Consolas,monospace;font-size:.76rem;line-height:1.35}.ok{color:var(--green)}.err{color:var(--danger)}.info{color:var(--blue)}.warn{color:var(--gold)}.pips{display:grid;grid-template-columns:repeat(25,1fr);gap:2px;margin:8px 0}.pip{height:9px;background:#2a2115;border:1px solid #3a2a15}.pip.on{background:var(--blue)}.pip.gold{background:var(--gold)}.modal{position:fixed;inset:0;background:rgba(0,0,0,.76);display:none;align-items:center;justify-content:center;padding:20px;z-index:10}.modal.show{display:flex}.modal-box{max-width:860px;max-height:88vh;overflow:auto;border:2px solid var(--gold);background:linear-gradient(180deg,#21170d,#0d0905);padding:20px;box-shadow:0 0 50px rgba(0,0,0,.8)}.modal-box h2{margin-top:0;color:var(--gold)}.start-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.difficulty-note{font-size:.82rem;color:var(--muted);line-height:1.35}.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.table{width:100%;border-collapse:collapse;font-size:.84rem}.table th,.table td{border:1px solid #3a2a15;padding:6px;text-align:left}.table th{color:var(--gold);background:#140f09}.table td{background:#0d0905}.share{border:1px dashed var(--gold);padding:12px;text-align:center;color:var(--gold);margin:12px 0;background:rgba(200,168,74,.05)}.rank-title{font-size:1.55rem;color:var(--gold);text-align:center;margin:8px 0}.stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}.stat-box{border:1px solid var(--gold2);background:#0d0905;padding:8px;text-align:center}.stat-box b{display:block;color:var(--gold);font-size:1.2rem}.help-btn{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:50%;z-index:8;font-size:1.25rem}
+.preview{border:1px solid #3a2a15;background:#0e0a06;padding:9px;margin-top:10px;font-size:.78rem;line-height:1.35;color:var(--muted)}.preview strong{color:var(--gold)}.preview .ok{color:var(--green)}.preview .err{color:var(--danger)}.preview .warn{color:var(--gold)}.preview hr{border:0;border-top:1px solid #3a2a15;margin:7px 0}.inline-actions{display:flex;gap:8px;align-items:end}.inline-actions input{flex:1}.mini-btn{padding:8px 10px;white-space:nowrap}.chip.disabled{opacity:.35;cursor:not-allowed;border-color:#3a2a15!important;color:var(--muted)!important;background:#100c08!important}.recipe.unavailable{opacity:.72}.collapsible{border:1px solid #3a2a15;background:#0d0905;margin:10px 0;padding:8px}.collapsible summary{cursor:pointer;color:var(--gold);font-weight:bold}.badge-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}.award{border:1px solid #3a2a15;background:#100c08;padding:8px;border-radius:4px}.award.earned{border-color:var(--gold);box-shadow:0 0 10px rgba(200,168,74,.14)}.award.locked{opacity:.45}.award b{display:block;color:var(--gold)}.mono{white-space:pre-wrap;font-family:Consolas,monospace;font-size:.76rem;background:#090604;border:1px solid #3a2a15;padding:8px}.danger-note{color:#f0b5a5;border:1px solid #804030;background:#160907;padding:9px;margin:8px 0}.small-note{font-size:.76rem;color:var(--muted);line-height:1.25}
+
+.toast-stack{position:fixed;right:18px;top:18px;display:grid;gap:8px;z-index:30;pointer-events:none;max-width:min(360px,calc(100vw - 36px))}.toast{border:1px solid var(--gold2);background:linear-gradient(180deg,rgba(36,26,16,.98),rgba(10,7,4,.98));box-shadow:0 0 24px rgba(0,0,0,.55);padding:10px 12px;border-radius:6px;animation:toastIn .22s ease-out,toastOut .35s ease-in 2.75s forwards;color:var(--text)}.toast b{display:block;color:var(--gold);margin-bottom:2px}.toast small{color:var(--muted);line-height:1.25}.toast.ok{border-color:#416d36}.toast.warn{border-color:var(--gold2)}.toast.err{border-color:#7e3c2f}.toast.legendary{border-color:var(--leg);box-shadow:0 0 24px rgba(212,106,16,.35)}.toast.mythic{border-color:#d9a7ff;box-shadow:0 0 30px rgba(190,90,255,.45)}@keyframes toastIn{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes toastOut{to{opacity:0;transform:translateY(-8px) scale(.98)}}.item-card.fx-legendary{animation:legendaryPulse .75s ease-out}.item-card.fx-ga{animation:goldPulse .75s ease-out}.item-card.fx-transfigure{animation:cubePulse .9s ease-out}.item-card.fx-fizzle{animation:fizzleShake .55s ease-in-out}.item-card.fx-capstone{animation:capstonePulse .75s ease-out}.item-card.fx-masterwork{animation:bluePulse .65s ease-out}@keyframes legendaryPulse{0%{box-shadow:0 0 0 rgba(212,106,16,0)}35%{box-shadow:0 0 32px rgba(212,106,16,.75);transform:translateY(-1px)}100%{box-shadow:0 0 0 rgba(212,106,16,0);transform:translateY(0)}}@keyframes goldPulse{0%{box-shadow:0 0 0 rgba(200,168,74,0)}40%{box-shadow:0 0 34px rgba(200,168,74,.85)}100%{box-shadow:0 0 0 rgba(200,168,74,0)}}@keyframes cubePulse{0%{box-shadow:0 0 0 rgba(120,80,220,0)}35%{box-shadow:0 0 34px rgba(120,80,220,.75),0 0 22px rgba(80,200,140,.45)}100%{box-shadow:0 0 0 rgba(120,80,220,0)}}@keyframes fizzleShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}@keyframes capstonePulse{0%{box-shadow:0 0 0 rgba(200,168,74,0)}40%{box-shadow:0 0 26px rgba(200,168,74,.65);filter:brightness(1.18)}100%{box-shadow:0 0 0 rgba(200,168,74,0);filter:brightness(1)}}@keyframes bluePulse{0%{box-shadow:0 0 0 rgba(90,154,224,0)}40%{box-shadow:0 0 24px rgba(90,154,224,.6)}100%{box-shadow:0 0 0 rgba(90,154,224,0)}}.gear-slot.fx-mini{animation:goldPulse .55s ease-out}.badge-reveal{opacity:0;transform:translateY(8px);animation:badgeReveal .36s ease-out forwards}@keyframes badgeReveal{to{opacity:1;transform:translateY(0)}}.badge.icon{font-size:.78rem;padding:2px 5px;background:#1b1206;color:var(--gold);border:1px solid var(--gold2)}
+
+
+.result-wide{width:min(1760px,97vw);max-width:none;height:min(900px,92vh);max-height:92vh;overflow:hidden;display:flex;flex-direction:column}.result-wide h2{margin:0 0 4px}.result-topline{display:flex;justify-content:space-between;gap:12px;align-items:start;flex:0 0 auto}.result-meta{text-align:right}.result-wide .share{margin:8px 0;flex:0 0 auto}.result-wide .stat-strip{margin:8px 0;flex:0 0 auto}.result-browser{display:grid;grid-template-columns:230px minmax(0,1fr);gap:12px;min-height:0;flex:1}.result-menu{border:1px solid #3a2a15;background:#0d0905;padding:8px;display:flex;flex-direction:column;gap:7px;min-height:0}.result-menu-title{color:var(--gold);font-weight:bold;margin:0 0 4px}.result-tab{border:1px solid var(--gold2);background:#100c08;color:var(--gold);padding:9px 10px;border-radius:4px;cursor:pointer;font-weight:bold;text-align:left}.result-tab.active{background:linear-gradient(#d8bd66,#956c27);color:#160f07;border-color:var(--gold)}.result-menu-note{margin-top:auto;color:var(--muted);font-size:.74rem;line-height:1.25}.result-content{border:1px solid #3a2a15;background:#090604;padding:10px;min-height:0;overflow:hidden}.result-page{height:100%;display:grid;gap:10px;align-content:start}.result-page h3{margin:0 0 7px;color:var(--gold)}.result-page.two-col{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)}.result-card{border:1px solid #3a2a15;background:#0d0905;padding:9px;min-width:0}.result-card.compact{padding:8px}.result-card p,.result-card ul{margin:0}.result-card ul{padding-left:18px}.progress-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.progress-card{border:1px solid #3a2a15;background:#100c08;padding:7px;border-radius:4px;min-width:0}.progress-card b{display:block;color:var(--gold);margin-bottom:4px;font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.progress-icons{display:flex;gap:3px;flex-wrap:wrap}.progress-icons span{border:1px solid #3a2a15;background:#0b0805;border-radius:3px;padding:1px 4px;color:var(--muted);font-size:.67rem}.progress-icons .done{color:var(--green);border-color:#416d36}.progress-icons .warn{color:var(--gold);border-color:var(--gold2)}.item-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:8px 0}.meta-chip{border:1px solid #3a2a15;background:#0b0805;border-radius:3px;padding:5px 7px;color:var(--muted);font-size:.75rem;line-height:1.2}.meta-chip b{display:block;color:var(--gold);font-size:.86rem}.meta-chip.good b{color:var(--green)}.meta-chip.warn b{color:var(--gold)}.limit-strip{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}.limit-strip span{border:1px solid #3a2a15;background:#0b0805;border-radius:3px;padding:3px 6px;color:var(--muted);font-size:.74rem}.limit-strip span.temper-limit{white-space:nowrap}.limit-strip .done{color:var(--green);border-color:#416d36}.limit-strip .warn{color:var(--gold);border-color:var(--gold2)}.identity-box{border:1px dashed var(--gold2);background:rgba(200,168,74,.04);padding:8px;color:var(--text);line-height:1.3;margin-bottom:7px}.badge-chip-list{display:flex;gap:5px;flex-wrap:wrap}.badge-chip{border:1px solid var(--gold2);background:#100c08;color:var(--gold);border-radius:999px;padding:3px 7px;font-size:.72rem}.badge-chip.dim{color:var(--muted);border-color:#3a2a15}.result-table-compact{width:100%;border-collapse:collapse;font-size:.78rem}.result-table-compact th,.result-table-compact td{border:1px solid #3a2a15;padding:4px;text-align:left}.result-table-compact th{color:var(--gold);background:#140f09}.affix-chip-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.affix-chip{border:1px solid #3a2a15;background:#100c08;border-radius:4px;padding:6px;font-size:.76rem;min-width:0}.affix-chip b{display:block;color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.badge-mini-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.badge-mini{border:1px solid #3a2a15;background:#100c08;padding:7px;border-radius:4px;font-size:.76rem}.badge-mini b{display:block;color:var(--gold)}.result-footer{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;flex:0 0 auto}.result-footer .btn{min-width:150px}.history-actions{display:flex;gap:6px;flex-wrap:wrap}.modal-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.modal-actions .btn{flex:1;min-width:160px}.tiny{font-size:.74rem;color:var(--muted)}
+@media(max-width:1180px){.result-wide{width:auto;height:auto;max-height:88vh;overflow:auto}.result-browser,.result-page.two-col{grid-template-columns:1fr}.result-menu{flex-direction:row;flex-wrap:wrap}.result-menu-note{display:none}.result-content{overflow:visible}.affix-chip-grid,.badge-mini-grid,.progress-grid{grid-template-columns:1fr}.result-meta{text-align:left}}
+
+@media(max-width:1180px){.layout,.topbar{grid-template-columns:1fr}.result-grid,.start-grid,.stat-strip{grid-template-columns:1fr}.character-layout{grid-template-columns:1fr}.slot-column{display:grid;grid-template-columns:1fr 1fr;gap:10px}.silhouette{min-height:260px;order:-1}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><h1>⬦ Horadric Forge Challenge ⬦</h1><p>Craft a full Diablo-style gear set before the Cube empties your pockets.</p></header>
+<section class="topbar card"><div class="run-stat">Character<b id="charDisplay">Unnamed Hero</b></div><div class="run-stat">Difficulty<b id="difficultyDisplay">Standard</b></div><div class="run-stat">Class<b id="classDisplay">Sorcerer</b></div><div class="run-stat">Weapon Style<b id="weaponDisplay">One-handed + Offhand</b></div><div class="run-stat">Modifier<b id="modifierDisplay">None</b></div><button class="btn" id="startBtn">New Run</button><button class="btn secondary" id="copySeedBtn">Copy Seed</button><div class="scorebox">Gear Score: <span id="totalScore">0</span><br><small id="seedDisplay"></small></div></section>
+<main class="layout"><aside class="panel inventory-panel"><h2>Inventory</h2><div class="inventory-list" id="materials"></div></aside><aside class="panel character-panel"><h2>Character Panel</h2><div class="character"><div class="character-layout"><div class="slot-column" id="leftSlots"></div><div class="silhouette">⬦</div><div class="slot-column" id="rightSlots"></div></div></div></aside><section class="panel gear-panel"><h2 id="activeTitle">Selected Gear</h2><div id="itemCard" class="item-card common"></div><div class="actions"><button class="btn" id="createBtn">Reforge Base Item</button><button class="btn" id="completeBtn">Complete Build</button></div><h3>Forge Log</h3><div class="log" id="log"></div></section><aside class="panel craft-panel"><h2>Cube Recipes</h2><div class="craft-grid" id="recipes"></div><h3 style="margin-top:12px;">Tuning Prism</h3><div class="prisms" id="prisms"></div><div class="actions"><button class="btn" id="transmuteBtn">Use Selected Cube Recipe</button></div><div class="preview" id="cubePreview"></div></aside><aside class="panel blacksmith-panel"><h2>Blacksmith</h2><label class="field">Temper Category<select id="temperCat"></select></label><label class="field">Temper Affix<select id="temperAffix"></select></label><div class="actions"><button class="btn" id="temperBtn">Temper / Reroll Temper</button><button class="btn" id="mwBtn">Masterwork</button><button class="btn secondary" id="capBtn">Reroll Capstone</button></div><div class="pips" id="mwPips"></div><p class="subtle" id="selectedInfo"></p><div class="preview" id="blacksmithPreview"></div></aside></main>
+</div>
+<div class="toast-stack" id="toastStack" aria-live="polite"></div>
+<button class="btn help-btn" id="helpBtn" title="Help">?</button>
+<div class="modal show" id="tutorial"><div class="modal-box"><h2>Start Horadric Forge Challenge</h2><p>Choose your class, difficulty, weapon setup and run modifier. A seed is the randomiser code for the run. Reusing it lets you replay the same random sequence.</p><div class="start-grid"><label class="field" style="grid-column:1/-1">Character Name<input id="charNameInput" placeholder="Optional"></label><label class="field">Class<select id="startClass"></select></label><label class="field">Difficulty<select id="startDifficulty"><option value="casual">Casual</option><option value="standard" selected>Standard</option><option value="harsh">Harsh</option></select></label><label class="field">Weapon Style<select id="startWeaponStyle"><option value="onehand">One-handed + Offhand</option><option value="twohand">Two-handed Weapon</option></select></label><label class="field">Run Modifier<select id="startModifier"></select></label><label class="field" style="grid-column:1/-1">Run Seed<div class="inline-actions"><input id="seedInput" placeholder="Leave blank for random"><button class="btn secondary mini-btn" type="button" id="randomSeedBtn">Random Seed</button></div></label></div><p class="difficulty-note" id="difficultyBlurb"></p><div class="preview" id="modifierPreview"></div><p class="small-note">Seed tip: same seed + same class, difficulty, weapon style, modifier and action order gives the same rolls. Leave blank for a random seed.</p><details class="collapsible"><summary>Modifier Details</summary><div id="modifierDetails" class="subtle"></div></details><details class="collapsible"><summary>How to Play</summary><ol><li>Your starter gear is equipped automatically. Improve it into the highest-scoring build you can.</li><li>Use Cube recipes to add, reroll, remove and upgrade affixes.</li><li>Each item has 3 temper charges. Every gear slot can use every temper category, so you can build freely without memorising slot restrictions. Casual and Standard let you choose the temper affix; Harsh rolls randomly within the chosen category.</li><li>Masterwork costs Forgotten Souls and Gold. Capstone unlocks at rank 25.</li><li>Transfigure last. It usually locks the item. Entropic Prism makes Transfiguration safer, but removes the bonus affix and Mythic Echo outcomes.</li><li>Rare Forge Omens can trigger after successful crafting actions, blessing or troubling the run in unexpected ways.</li></ol></details><p class="share">The Cube provides no refunds.</p><div class="modal-actions"><button class="btn" id="beginBtn">Begin Forging</button><button class="btn secondary" id="cancelStartBtn" type="button">Return to Run</button></div></div></div>
+<div class="modal" id="resultModal"><div class="modal-box" id="resultBox"></div></div>
+<div class="modal" id="helpModal"><div class="modal-box"><h2>How to Play</h2><p><b>Goal:</b> build the highest-scoring gear set before your resources run out.</p><ul><li><b>Seed:</b> the code that drives the randomiser. Reuse it to replay a run.</li><li><b>Cube:</b> add affixes, reroll affixes, upgrade Rares to Legendaries, or Transfigure. Transfigure can raise Item Power, empower affixes, add Capstones, or backfire. Entropic removes the worst and best extremes.</li><li><b>Blacksmith:</b> temper each item up to 3 times and masterwork to rank 25.</li><li><b>Two-handed weapons:</b> stronger weapon scoring, but no offhand slot.</li><li><b>Relaxed affixes:</b> all gear slots can use all affix categories; prisms hard-target their listed categories.</li><li><b>Run modifiers:</b> optional twists that change resources, Transfiguration risk, or scoring pressure.</li><li><b>Final totals:</b> values are shown after Masterwork, Greater Affix, Capstone and Transfigure boosts.</li></ul><button class="btn" onclick="document.getElementById('helpModal').classList.remove('show')">Close</button></div></div>
+
+<div class="modal" id="completeModal"><div class="modal-box"><h2>Complete Build?</h2><div class="danger-note"><b>Final check:</b> this will open the result screen for the current build. You can return afterwards, but the score will be saved to history.</div><div id="completeWarnings" class="subtle"></div><div class="modal-actions"><button class="btn" id="confirmCompleteBtn">Complete Build</button><button class="btn secondary" id="cancelCompleteBtn">Return to Run</button></div></div></div>
+<div class="modal" id="reforgeModal"><div class="modal-box"><h2>Confirm Reforge</h2><div class="danger-note"><b>Warning:</b> this will overwrite the selected gear and revert it to a Common base item. All affixes, tempering, masterworking, capstone and transfiguration effects will be removed. No materials are refunded.</div><p id="reforgeText" class="subtle"></p><div class="actions"><button class="btn danger" id="confirmReforgeBtn">Confirm Reforge</button><button class="btn secondary" id="cancelReforgeBtn">Cancel</button></div></div></div>
+<script>
+const CLASSES={barbarian:'Barbarian',sorcerer:'Sorcerer',rogue:'Rogue',necromancer:'Necromancer',druid:'Druid',spiritborn:'Spiritborn',paladin:'Paladin',warlock:'Warlock'};
+const EQUIP=['helm','chest','gloves','pants','boots','weapon','amulet','ring1','ring2','offhand'];
+const LEFT_SLOTS=['helm','chest','gloves','pants','boots','weapon'];
+const RIGHT_SLOTS=['amulet','ring1','ring2','offhand'];
+const SLOT_NAMES={helm:'Helm',chest:'Chest Armor',gloves:'Gloves',pants:'Pants',boots:'Boots',weapon:'Weapon',amulet:'Amulet',ring1:'Ring 1',ring2:'Ring 2',offhand:'Offhand'};
+const POOL_SLOT={ring1:'ring',ring2:'ring',weapon:'weapon',offhand:'offhand',helm:'helm',chest:'chest',gloves:'gloves',pants:'pants',boots:'boots',amulet:'amulet'};
+const ITEM_POWER_BASE=900;
+const BASE={helm:['Armor',800,1200],chest:['Armor',1200,1800],gloves:['Armor',400,700],pants:['Armor',900,1400],boots:['Armor',500,900],weapon:['DPS',1800,3200],amulet:['Accessory',0,0],ring1:['Accessory',0,0],ring2:['Accessory',0,0],offhand:['Offhand Power',400,900]};
+const CATS=['Offensive','Defensive','Resource','Mobility','Utility','Core Stat','Skill','Resistance'];
+const TEMPER_CATS_BY_SLOT=Object.fromEntries(EQUIP.map(sl=>[sl,CATS]));
+const MAT_ICONS={gold:'https://wow.zamimg.com/d4/d4/texture/hash/134/3826054.webp',souls:'https://wow.zamimg.com/d4/d4/texture/hash/213/3500380629.webp',raw:'https://wow.zamimg.com/d4/d4/texture/hash/147/1353277587.webp',coarse:'https://wow.zamimg.com/d4/d4/texture/hash/148/1353277588.webp',refined:'https://wow.zamimg.com/d4/d4/texture/hash/149/1353277589.webp',pure:'https://wow.zamimg.com/d4/d4/texture/hash/150/1353277590.webp',volatile:'https://wow.zamimg.com/d4/d4/texture/hash/152/1353277592.webp'};
+const PRISMS=[['aggressive','Aggressive',['Offensive'],'https://wow.zamimg.com/d4/d4/texture/hash/225/3799883745.webp'],['protector','Protector',['Defensive'],'https://wow.zamimg.com/d4/d4/texture/hash/226/3799883746.webp'],['resourceful','Resourceful',['Resource'],'https://wow.zamimg.com/d4/d4/texture/hash/227/3799883747.webp'],['pragmatic','Pragmatic',['Mobility','Utility'],'https://wow.zamimg.com/d4/d4/texture/hash/228/3799883748.webp'],['adept','Adept',['Core Stat','Skill'],'https://wow.zamimg.com/d4/d4/texture/hash/230/3799883750.webp'],['chromatic','Chromatic',['Resistance'],'https://wow.zamimg.com/d4/d4/texture/hash/229/3799883749.webp'],['entropic','Entropic',null,'https://wow.zamimg.com/d4/d4/texture/hash/231/3799883751.webp']].map(x=>({id:x[0],name:x[1],cats:x[2],img:x[3]}));
+const RECIPES=[['add','Add Affix','1 Coarse + 5 Raw. Adds up to 4 affixes. Category prism hard-targets that category.'],['chaotic','Chaotic Reroll','1 Refined + 15 Raw. Rerolls one affix into a different category. Category prism hard-targets the new category.'],['focused','Focused Reroll','1 Refined + 15 Raw + Prism. Rerolls within the selected prism category.'],['remove','Remove Affix','1 Refined + 15 Raw. Category prism removes only that category.'],['legendary','Upgrade Legendary','1 Pure + 10 Raw. Rare to Legendary.'],['transfigure','Transfigure','1 Volatile. Can boost or damage the item. Entropic removes worst and best extremes.']].map(x=>({id:x[0],name:x[1],desc:x[2]}));
+const MODIFIERS={none:{name:'None',short:'Normal run. No extra twists.',details:'The standard Horadric Forge Challenge rules. Best for learning the baseline.'},dust_flood:{name:'Dust Flood',short:'+30% dust, -20% gold.',details:'The Cube overflows with dust. You can add and reroll more affixes, but Masterwork and Capstone decisions are tighter.'},golden_forge:{name:'Golden Forge',short:'+35% gold, -50% prisms.',details:'Gold is abundant, making Masterwork and Capstone rerolls easier, but precise prism targeting is much rarer.'},prism_drought:{name:'Prism Drought',short:'-65% prisms, +8% score.',details:'Targeting is scarce, but surviving the drought earns a prestige score bonus.'},unstable_cube:{name:'Unstable Cube',short:'Stronger Transfigures, more fizzles.',details:'Normal Transfiguration rolls can hit harder, but the Cube fizzles more often. Entropic still dampens the chaos.'},masterwork_madness:{name:'Masterwork Madness',short:'Cheaper Masterwork, costly Capstones.',details:'Masterworking is cheaper, so more items can reach rank 25, but Capstone rerolls are expensive.'}};
+const DIFF={casual:{gold:90000,souls:3600,raw:3600,coarse:260,refined:200,pure:18,volatile:14,prism:12,rare:6},standard:{gold:136000,souls:6000,raw:5400,coarse:400,refined:290,pure:24,volatile:16,prism:16,rare:6},harsh:{gold:42000,souls:1850,raw:1850,coarse:135,refined:90,pure:8,volatile:5,prism:5,rare:1}};
+const A=[['Critical Strike Chance','Offensive','%',3,10,9,['gloves','amulet','ring','offhand']],['Critical Strike Damage','Offensive','%',15,50,9,['gloves','weapon','ring','offhand']],['Vulnerable Damage','Offensive','%',10,50,8,['gloves','weapon','ring']],['Overpower Damage','Offensive','%',15,60,7,['gloves','weapon','ring']],['Attack Speed','Offensive','%',3,12,9,['gloves','weapon']],['Lucky Hit Chance','Offensive','%',3,12,7,['helm','gloves','weapon','amulet','ring','offhand']],['Damage','Offensive','%',8,35,6,['chest','gloves','weapon','amulet','ring','offhand']],['Core Skill Damage','Offensive','%',15,50,8,['weapon']],['Ultimate Skill Damage','Offensive','%',15,50,6,['chest','weapon','amulet']],['Damage to Crowd Controlled','Offensive','%',10,35,6,['gloves','weapon','ring']],['Damage to Elites','Offensive','%',10,35,6,['weapon','ring']],['Maximum Life','Defensive','',500,2000,8,['helm','chest','pants','ring']],['Total Armor','Defensive','',200,1500,7,['helm','chest','pants','boots','amulet']],['Damage Reduction','Defensive','%',5,18,9,['chest','pants','amulet','ring']],['Damage Reduction from Close','Defensive','%',8,25,7,['chest','pants']],['Dodge Chance','Defensive','%',3,12,6,['chest','pants','boots','amulet']],['Fortify Generation','Defensive','%',5,20,5,['chest','boots']],['Barrier Generation','Defensive','%',5,20,5,['helm']],['Healing Received','Defensive','%',5,20,4,['helm','pants','offhand']],['Life on Kill','Defensive','',200,800,4,['weapon','offhand']],['Block Chance','Defensive','%',5,20,6,['offhand']],['Maximum Resource','Resource','',10,40,7,['helm']],['Resource Generation','Resource','%',5,20,7,['offhand','ring']],['Resource Cost Reduction','Resource','%',5,18,8,['offhand','amulet','ring']],['Movement Speed','Mobility','%',10,25,8,['boots','amulet']],['Movement Speed after Elite Kill','Mobility','%',15,40,5,['boots','amulet']],['Evade Grants Movement Speed','Mobility','%',20,50,6,['boots']],['Evade Charges','Mobility','',1,2,7,['pants','boots']],['Cooldown Reduction','Utility','%',3,10,9,['helm','weapon','offhand','amulet','ring']],['Crowd Control Duration','Utility','%',5,20,5,['helm','amulet']],['Potion Capacity','Utility','',1,3,3,['pants']],['Shrine Buff Duration','Utility','%',10,35,3,['boots','amulet']],['All Stats','Core Stat','',30,120,8,['helm','chest','gloves','pants','boots','weapon','offhand','amulet','ring']],['Strength','Core Stat','',40,200,6,['helm','chest','pants','boots','amulet']],['Dexterity','Core Stat','',40,200,6,['helm','chest','gloves','pants','boots','offhand','amulet']],['Intelligence','Core Stat','',40,200,6,['helm','chest','pants','boots','weapon','offhand','amulet']],['Willpower','Core Stat','',40,200,6,['helm','chest','pants','boots','weapon','amulet']],['Ranks to Core Skills','Skill','',1,3,10,['gloves','weapon']],['Ranks to Passive Skills','Skill','',1,3,9,['helm','amulet']],['Ranks to Defensive Skills','Skill','',1,3,8,['amulet']],['Ranks to All Skills','Skill','',1,2,10,['amulet']],['Resistance to All Elements','Resistance','',100,500,6,['chest','amulet','ring']],['Cold Resistance','Resistance','',150,600,4,['helm']],['Fire Resistance','Resistance','',150,600,4,['helm']],['Lightning Resistance','Resistance','',150,600,4,['helm']],['Shadow Resistance','Resistance','',150,600,4,['helm','pants','offhand']],['Poison Resistance','Resistance','',150,600,4,['helm']],['Ranks to Barbarian Skills','Skill','',1,2,10,['gloves','weapon','amulet'],['barbarian']],['Berserking Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['barbarian']],['Ranks to Pyromancy Skills','Skill','',1,2,10,['gloves','weapon','amulet'],['sorcerer']],['Pyromancy Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['sorcerer']],['Ranks to Rogue Skills','Skill','',1,2,10,['gloves','weapon','amulet'],['rogue']],['Imbuement Skill Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['rogue']],['Ranks to Necromancer Skills','Skill','',1,2,10,['gloves','weapon','amulet'],['necromancer']],['Minion Attack Speed','Offensive','%',4,14,8,['gloves','ring','amulet'],['necromancer']],['Ranks to Druid Skills','Skill','',1,2,10,['gloves','weapon','amulet'],['druid']],['Companion Skill Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['druid']],['Ranks to Spiritborn Skills','Skill','',1,2,10,['gloves','weapon','amulet'],['spiritborn']],['Vigor Generation','Resource','%',5,20,8,['offhand','ring','amulet'],['spiritborn']],['Bleed Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['barbarian']],['Fury Generation','Resource','%',5,20,8,['helm','offhand','ring','amulet'],['barbarian']],['Brawling Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['barbarian']],['Frost Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['sorcerer']],['Shock Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['sorcerer']],['Mana Generation','Resource','%',5,20,8,['helm','offhand','ring','amulet'],['sorcerer']],['Marksman Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['rogue']],['Trap Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['rogue']],['Energy Generation','Resource','%',5,20,8,['helm','offhand','ring','amulet'],['rogue']],['Bone Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['necromancer']],['Shadow Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['necromancer']],['Essence Generation','Resource','%',5,20,8,['helm','offhand','ring','amulet'],['necromancer']],['Shapeshifting Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['druid']],['Nature Magic Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['druid']],['Spirit Generation','Resource','%',5,20,8,['helm','offhand','ring','amulet'],['druid']],['Eagle Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['spiritborn']],['Jaguar Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['spiritborn']],['Vigor Cost Reduction','Resource','%',5,18,8,['offhand','amulet','ring'],['spiritborn']],['Ranks to Paladin Skills','Skill','',1,2,10,['gloves','weapon','amulet'],['paladin']],['Holy Damage','Offensive','%',12,45,9,['weapon','ring','amulet'],['paladin']],['Justice Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['paladin']],['Aura Potency','Utility','%',10,30,8,['helm','boots','amulet'],['paladin']],['Faith Generation','Resource','%',5,20,8,['helm','offhand','ring','amulet'],['paladin']],['Damage while Shielded','Offensive','%',10,35,7,['chest','weapon','amulet','ring'],['paladin']],['Armor while Consecrated','Defensive','%',5,18,7,['chest','pants','amulet','offhand'],['paladin']],['Ranks to Warlock Skills','Skill','',1,2,10,['gloves','weapon','amulet'],['warlock']],['Hellfire Damage','Offensive','%',12,45,9,['weapon','ring','amulet'],['warlock']],['Abyss Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['warlock']],['Occult Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['warlock']],['Demon Damage','Offensive','%',12,45,8,['weapon','ring','amulet'],['warlock']],['Shadowform Damage','Offensive','%',10,35,7,['weapon','ring','amulet'],['warlock']],['Sigil Duration','Utility','%',15,50,6,['helm','boots','amulet'],['warlock']],['Dominance Generation','Resource','%',5,20,8,['helm','offhand','ring','amulet'],['warlock']],['Demonform Damage Reduction','Defensive','%',5,18,8,['chest','pants','amulet','offhand'],['warlock']]].map(x=>({n:x[0],c:x[1],u:x[2],mn:x[3],mx:x[4],w:x[5],sl:x[6],cls:x[7]||null}));
+
+let S={runActive:false,mode:'challenge',difficulty:'standard',classId:'sorcerer',weaponStyle:'onehand',activeSlot:'weapon',recipe:'add',prism:null,gear:{},mat:{},seed:'',rngState:1,charName:'Unnamed Hero',startTime:null,modifier:'none',pendingReforge:null,omens:0,tf:{attempts:0,normal:0,entropic:0,fizzle:0,success:0,bonus:0,boost:0,ga:0,echo:0}};
+const $=id=>document.getElementById(id);
+function hashSeed(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0 || 1}
+function rand01(){S.rngState=(Math.imul(1664525,S.rngState)+1013904223)>>>0;return S.rngState/4294967296}
+const r=(a,b)=>rand01()*(b-a)+a, ri=(a,b)=>Math.floor(r(a,b+1)), pick=a=>a[Math.floor(rand01()*a.length)], chance=p=>rand01()<p;
+function makeSeed(){return Math.random().toString(36).slice(2,8).toUpperCase()}
+function fillRandomSeed(){const seed=makeSeed();S.seed=seed;if($('seedInput'))$('seedInput').value=seed;updateDifficultyText()}
+function copySeed(){const seed=S.seed||($('seedInput')?.value||'').trim();if(!seed){log('No seed to copy yet.','warn');toast('No seed to copy','Start or enter a seed first.','warn');return}navigator.clipboard?.writeText(seed).then(()=>{log(`Seed copied: ${seed}`,'ok');toast('Seed copied',seed,'ok')}).catch(()=>{log('Could not copy seed automatically.','warn');toast('Copy failed','Your browser blocked clipboard access.','warn')})}
+function displayName(v){return String(v||'').replace(/(^|\s|-)([a-z])/g,(m,p,c)=>p+c.toUpperCase())}
+function difficultyLabel(d){return {casual:'Casual',standard:'Standard',harsh:'Harsh'}[d]||displayName(d)}
+function weaponLabel(w){return w==='twohand'?'Two-handed Weapon':'One-handed + Offhand'}
+function modeForDifficulty(d){return d==='casual'?'sandbox':'challenge'}
+function modifierObj(id=S.modifier){return MODIFIERS[id]||MODIFIERS.none}
+function modifierLabel(id=S.modifier){return modifierObj(id).name}
+function modifierScoreMult(){return S.modifier==='prism_drought'?1.08:1}
+function masterworkCost(){return S.modifier==='masterwork_madness'?{souls:15,gold:300}:{souls:25,gold:500}}
+function capstoneCost(){return S.modifier==='masterwork_madness'?{gold:1800}:{gold:1000}}
+function scaleMaterial(v,m){return Math.max(0,Math.floor(v*m))}
+function updateModifierText(){let id=$('startModifier')?.value||S.modifier||'none',m=modifierObj(id);if($('modifierPreview'))$('modifierPreview').innerHTML=`<strong>${m.name}</strong><br>${m.short}`;if($('modifierDetails'))$('modifierDetails').innerHTML=Object.entries(MODIFIERS).map(([k,v])=>`<p><b>${v.name}:</b> ${v.details}</p>`).join('')}
+function difficultyDescription(d){return {casual:'Casual: free-craft practice mode with effectively unlimited resources. Best for learning, testing and big-number builds.',standard:'Standard: the normal challenge. More generous resources for relaxed play, with enough room to experiment, reroll and push higher scores.',harsh:'Harsh: the harder challenge. Reduced materials and gold mean you probably cannot perfect every slot.'}[d]}
+function logIcon(t){return {ok:'✅',err:'❌',warn:'⚠️',info:'✦'}[t]||'✦'}
+function log(m,t='info',icon=null){const box=$('log');if(!box)return;const d=document.createElement('div');d.className=t;d.textContent=`${icon||logIcon(t)} ${m}`;box.prepend(d)}
+function toast(title,msg='',type='info'){const stack=$('toastStack');if(!stack)return;const d=document.createElement('div');d.className=`toast ${type}`;d.innerHTML=`<b>${title}</b>${msg?`<small>${msg}</small>`:''}`;stack.appendChild(d);setTimeout(()=>d.remove(),3300)}
+function flash(kind){const card=$('itemCard');if(card){card.classList.remove('fx-legendary','fx-ga','fx-transfigure','fx-fizzle','fx-capstone','fx-masterwork');void card.offsetWidth;card.classList.add(`fx-${kind}`);setTimeout(()=>card.classList.remove(`fx-${kind}`),950)}const slot=document.querySelector('.gear-slot.active');if(slot){slot.classList.remove('fx-mini');void slot.offsetWidth;slot.classList.add('fx-mini');setTimeout(()=>slot.classList.remove('fx-mini'),700)}}
+function eventFeedback(kind,title,msg='',type='info'){flash(kind);toast(title,msg,type)}
+function matCost(cost){if(S.mode==='sandbox')return true;for(const k in cost)if((S.mat[k]||0)<cost[k])return false;for(const k in cost)S.mat[k]-=cost[k];return true}
+function canAfford(cost){if(S.mode==='sandbox')return true;for(const k in cost)if((S.mat[k]||0)<cost[k])return false;return true}
+function costText(cost){const labels={gold:'Gold',souls:'Forgotten Souls',raw:'Raw Dust',coarse:'Coarse Dust',refined:'Refined Dust',pure:'Pure Dust',volatile:'Volatile Dust'};const parts=Object.entries(cost||{}).map(([k,v])=>`${v} ${labels[k]||k}`);return parts.length?parts.join(', '):'None'}
+function active(){return S.gear[S.activeSlot]}
+function canUseSlot(sl){return !(sl==='offhand'&&S.weaponStyle==='twohand')}
+function usableSlots(){return EQUIP.filter(canUseSlot)}
+function prismObj(){return PRISMS.find(p=>p.id===S.prism)||null}
+function categoryPrismRecipe(id){return ['add','chaotic','focused','remove'].includes(id)}
+function recipeUsesPrism(id){return categoryPrismRecipe(id)||id==='transfigure'}
+function prismAllowedForRecipe(id,p){if(!p)return true;if(id==='transfigure')return p.id==='entropic';if(categoryPrismRecipe(id))return p.id!=='entropic';return false}
+function prismUnavailableReason(id,p){if(!p)return '';if(p.id==='entropic'&&id!=='transfigure')return 'Entropic Prism only works with Transfigure.';if(id==='transfigure'&&p.id!=='entropic')return 'Only Entropic Prism can influence Transfigure.';return 'This prism cannot be used with this recipe.'}
+function prismRecipeNote(id,p){if(!p||!recipeUsesPrism(id))return '';if(id==='transfigure'&&p.id==='entropic')return 'Entropic hard-targets safer Transfiguration outcomes.';if(p.cats&&id==='add')return `${p.name} hard-targets: ${p.cats.join(' / ')}.`;if(p.cats&&id==='chaotic')return `${p.name} hard-targets the new affix category: ${p.cats.join(' / ')}.`;if(p.cats&&id==='focused')return `${p.name} rerolls within: ${p.cats.join(' / ')}.`;if(p.cats&&id==='remove')return `${p.name} removes only: ${p.cats.join(' / ')}.`;return ''}
+function clearInvalidPrism(){const p=prismObj();if(p&&!prismAllowedForRecipe(S.recipe,p))S.prism=null}
+function getSelectedPrism(required=false){if(!recipeUsesPrism(S.recipe))return null;if(!S.prism){if(required){log('This recipe needs a prism.','err');return false}return null}const p=prismObj();if(!p||!prismAllowedForRecipe(S.recipe,p)){log(prismUnavailableReason(S.recipe,p),'err');return false}if(S.mode!=='sandbox'&&(S.mat[p.id]||0)<=0){log('You do not have any of that prism left.','err');return false}return p}
+function spendPrism(prism){if(prism&&S.mode!=='sandbox')S.mat[prism.id]--}
+function recipeCost(id){return {add:{coarse:1,raw:5},chaotic:{refined:1,raw:15},focused:{refined:1,raw:15},remove:{refined:1,raw:15},legendary:{pure:1,raw:10},transfigure:{volatile:1}}[id]||{}}
+function pool(slot,cats=null,ex=[]){return A.filter(a=>!cats||cats.includes(a.c)).filter(a=>!a.cls||a.cls.includes(S.classId)).filter(a=>!ex.includes(a.n))}
+function rollAff(slot,cats=null,ex=[],ga=false,forcedName=null){let p=pool(slot,cats,ex);if(forcedName)p=p.filter(a=>a.n===forcedName);if(!p.length && !forcedName)p=pool(slot,null,ex);if(!p.length)return null;const d=pick(p),v=r(d.mn,d.mx);return {...d,value:v,rollPct:(v-d.mn)/(d.mx-d.mn||1)*100,ga}}
+function rollAffStrict(slot,cats=null,ex=[],ga=false,forcedName=null){let p=pool(slot,cats,ex);if(forcedName)p=p.filter(a=>a.n===forcedName);if(!p.length)return null;const d=pick(p),v=r(d.mn,d.mx);return {...d,value:v,rollPct:(v-d.mn)/(d.mx-d.mn||1)*100,ga}}
+function chaoticChoices(it,p=null){if(!it)return [];return it.affixes.map((a,i)=>({a,i,cats:(p?.cats||CATS).filter(c=>c!==a.c)})).filter(x=>x.cats.length&&pool(it.slot,x.cats,it.affixes.filter((_,i)=>i!==x.i).map(a=>a.n)).length>0)}
+
+function itemIdentity(slot){
+  const cls=S.classId;
+  const two=S.weaponStyle==='twohand';
+  const weaponMap={barbarian:two?'Two-Handed Axe':'One-Handed Axe',sorcerer:two?'Staff':'Wand',rogue:two?'Bow':'Dagger',necromancer:two?'Two-Handed Scythe':'Scythe',druid:two?'Staff':'One-Handed Axe',spiritborn:two?'Glaive':'Glaive',paladin:two?'Greatsword':'Mace',warlock:two?'Staff':'Wand'};
+  const offhandMap={barbarian:['One-Handed Mace','DPS',900,1600,''],rogue:['Dagger','DPS',850,1500,''],sorcerer:['Focus','Lucky Hit',4,10,'%'],necromancer:['Focus','Lucky Hit',4,10,'%'],druid:['Totem','Lucky Hit',4,10,'%'],spiritborn:['Spirit Focus','Vigor Power',400,900,''],paladin:['Shield','Armor',900,1500,''],warlock:['Pact Focus','Lucky Hit',4,10,'%']};
+  const armorNames={helm:'Helm',chest:'Chest Armor',gloves:'Gloves',pants:'Pants',boots:'Boots'};
+  if(slot==='weapon')return {type:weaponMap[cls]||'Weapon',baseStat:'DPS',mn:two?3000:1800,mx:two?5200:3200,unit:''};
+  if(slot==='offhand'){let o=offhandMap[cls]||['Focus','Offhand Power',400,900,''];return {type:o[0],baseStat:o[1],mn:o[2],mx:o[3],unit:o[4]||''};}
+  if(armorNames[slot]){const b=BASE[slot];return {type:armorNames[slot],baseStat:'Armor',mn:b[1],mx:b[2],unit:''};}
+  if(slot==='amulet')return {type:'Amulet',baseStat:'Accessory',mn:0,mx:0,unit:''};
+  if(slot==='ring1'||slot==='ring2')return {type:'Ring',baseStat:'Accessory',mn:0,mx:0,unit:''};
+  const b=BASE[slot]||['Item Power',0,0];return {type:SLOT_NAMES[slot]||slot,baseStat:b[0],mn:b[1],mx:b[2],unit:''};
+}
+function baseValueText(it){
+  if(!it)return '';
+  if(!it.baseStat||it.baseStat==='Accessory')return 'Accessory';
+  return `${it.baseStat}: ${fmt(it.baseValue)}${it.baseUnit||''}`;
+}
+function itemDisplayName(it){return it?`${displayName(it.rarity)} ${it.itemType||it.slotName}`:'Empty Slot'}
+function capstoneTargets(it){
+  let t=[];
+  if(!it)return t;
+  it.affixes.forEach((a,i)=>t.push({index:i,temp:false,a}));
+  if(it.tempered)t.push({index:null,temp:true,a:it.tempered});
+  return t;
+}
+function capstoneHits(it,index,temp=false){
+  if(!it)return 0;
+  let hits=0;
+  if(temp){if(it.capstoneTempered)hits++;}
+  else if(it.capstoneIndex===index)hits++;
+  (it.extraCapstones||[]).forEach(c=>{if(!!c.temp===!!temp&&(temp||c.index===index))hits++;});
+  return hits;
+}
+function hasAnyCapstone(it){return !!it&&(it.capstoneIndex!==null||it.capstoneTempered||(it.extraCapstones||[]).length>0)}
+function capstoneCount(it){return it?((it.capstoneIndex!==null||it.capstoneTempered)?1:0)+(it.extraCapstones||[]).length:0}
+function clearCapstones(it){if(!it)return;it.capstoneIndex=null;it.capstoneTempered=false;it.extraCapstones=[];}
+function removeRandomCapstone(it){
+  if(!hasAnyCapstone(it))return false;
+  let all=[];
+  if(it.capstoneIndex!==null||it.capstoneTempered)all.push({primary:true});
+  (it.extraCapstones||[]).forEach((c,i)=>all.push({primary:false,i}));
+  let chosen=pick(all);
+  if(chosen.primary){it.capstoneIndex=null;it.capstoneTempered=false;}else{it.extraCapstones.splice(chosen.i,1);}
+  return true;
+}
+function addExtraCapstone(it){
+  const targets=capstoneTargets(it);
+  if(!targets.length)return null;
+  const available=targets.filter(t=>capstoneHits(it,t.index,t.temp)===0);
+  const chosen=pick(available.length?available:targets);
+  it.extraCapstones=it.extraCapstones||[];
+  it.extraCapstones.push({index:chosen.index,temp:chosen.temp});
+  return chosen.a;
+}
+function itemPowerScore(it){return it?2+Math.max(0,(it.itemPower||ITEM_POWER_BASE)-ITEM_POWER_BASE)*0.12:0}
+function makeItem(slot){
+  const id=itemIdentity(slot);
+  const baseValue=id.mx>0?ri(id.mn,id.mx):0;
+  return{slot,slotName:SLOT_NAMES[slot],itemType:id.type,className:CLASSES[S.classId],itemPower:ITEM_POWER_BASE,baseStat:id.baseStat,baseValue,baseUnit:id.unit||'',rarity:'common',affixes:[],tempered:null,temperCharges:3,mwRank:0,capstoneIndex:null,capstoneTempered:false,extraCapstones:[],transfigured:false,unmodifiable:false,valueBoost:1}
+}
+function rarity(it){if(!it||it.rarity==='legendary')return;it.rarity=it.affixes.length===0?'common':it.affixes.length<=2?'magic':'rare'}
+function val(a,it,isTemp=false){let idx=isTemp?null:it.affixes.indexOf(a);let m=it.valueBoost*(1+it.mwRank/100);if(a.ga)m*=1.5;let caps=capstoneHits(it,idx,isTemp);if(caps)m*=Math.pow(1.5,caps);return a.value*m}
+function scoreItem(it){if(!it)return 0;let arr=[...it.affixes,it.tempered].filter(Boolean),s=0,slotMult=(it.slot==='weapon'&&S.weaponStyle==='twohand')?1.75:1;arr.forEach((a,i)=>{let isTemp=i===it.affixes.length,idx=isTemp?null:i,m=it.valueBoost*(1+it.mwRank/100);if(a.ga)m*=1.5;let caps=capstoneHits(it,idx,isTemp);if(caps)m*=Math.pow(1.5,caps);s+=a.w*(a.rollPct/100)*m*slotMult});if(it.transfigured)s+=8*slotMult;let baseScore=(it.baseValue/1000)+itemPowerScore(it);return Math.round((s+baseScore)*modifierScoreMult())}
+function totalScore(){return EQUIP.reduce((n,sl)=>n+scoreItem(S.gear[sl]),0)}
+function fmt(n){return Number.isInteger(n)?n:n.toFixed(1)}
+function categoryClass(cat){return String(cat||'').replace(/\s+/g,'')}
+function affHtml(a,it,temp=false){let idx=temp?null:it.affixes.indexOf(a);let caps=capstoneHits(it,idx,temp);let cat=categoryClass(a.c);let capBadge=caps?`<span class="badge icon" title="Capstone${caps>1?' x'+caps:''}">🔱${caps>1?'×'+caps:''}</span>`:'';return `<div class="affix ${temp?'temp':''} ${caps?'cap':''}">${temp?'<span class="badge icon" title="Tempered">🛠️</span>':''}${a.ga?'<span class="badge icon" title="Greater Affix">⭐</span>':''}${capBadge}<span class="cat-${cat}">+${fmt(val(a,it,temp))}${a.u} ${a.n}</span><div class="subtle">${a.c} · Roll ${Math.round(a.rollPct)}%</div></div>`}
+function recipeStatus(id){const it=active(),cost=recipeCost(id),p=prismObj();let ok=true,why='Ready.';if(!it){ok=false;why='No selected item.'}else if(!canAfford(cost)){ok=false;why='Not enough materials.'}else if(recipeUsesPrism(id)&&p&&!prismAllowedForRecipe(id,p)){ok=false;why=prismUnavailableReason(id,p)}else if(recipeUsesPrism(id)&&p&&S.mode!=='sandbox'&&(S.mat[p.id]||0)<=0){ok=false;why='No selected prism remaining.'}else if(it.unmodifiable && ['add','chaotic','focused','remove','transfigure'].includes(id)){ok=false;why='Item is locked by Transfiguration.'}else if(id==='add'&&it.affixes.length>=4){ok=false;why='Item already has 4 normal affixes.'}
+else if(id==='add'&&p?.cats&&!pool(it.slot,p.cats,it.affixes.map(a=>a.n)).length){ok=false;why=`No valid ${p.name} affix remains for this slot.`}
+else if(id==='chaotic'){
+  if(!it.affixes.length){ok=false;why='Needs at least one affix to reroll.'}
+  else if(!chaoticChoices(it,p).length){ok=false;why=p?'No valid different-category reroll exists for the selected prism.':'No valid different-category reroll exists for this item.'}
+}else if(id==='focused'){
+  if(!p){ok=false;why='Focused Reroll requires a prism.'}
+  else if(!it.affixes.some(a=>p.cats?.includes(a.c))){ok=false;why='No affix matches the selected prism category.'}
+}else if(id==='remove'){
+  if(!it.affixes.length){ok=false;why='No affixes to remove.'}
+  else if(p?.cats && !it.affixes.some(a=>p.cats.includes(a.c))){ok=false;why='No affix matches the selected prism category.'}
+}else if(id==='legendary'&&it.rarity!=='rare'){ok=false;why='Requires a Rare item.'}
+else if(id==='transfigure'&&it.rarity!=='legendary'){ok=false;why='Requires a Legendary item.'}
+else if(id==='transfigure'&&it.unmodifiable){ok=false;why='Item is already locked.'}
+return {ok,why,cost};
+}
+function addAff(){let st=recipeStatus('add');if(!st.ok)return log(st.why,'err');let it=active();const p=getSelectedPrism(false);if(p===false)return;let cats=p?.cats||null;const ex=it.affixes.map(x=>x.n);const a=p?rollAffStrict(it.slot,cats,ex):rollAff(it.slot,null,ex);if(!a)return log(p?`No valid ${p.name} affix remains for this slot.`:'No valid affix found.','err');if(!matCost(st.cost))return log('Not enough dust.','err');if(p)spendPrism(p);it.affixes.push(a);rarity(it);log(`Added ${a.n}${p?` using ${p.name} Prism`:''}.`,'ok','✨')}
+function chaotic(){let st=recipeStatus('chaotic');if(!st.ok)return log(st.why,'err');let it=active();const p=getSelectedPrism(false);if(p===false)return;let choices=chaoticChoices(it,p);if(!choices.length)return log(st.why,'err');const ch=pick(choices),old=ch.a;const a=rollAffStrict(it.slot,ch.cats,it.affixes.filter((_,i)=>i!==ch.i).map(x=>x.n));if(!a)return log('No valid reroll found.','err');if(!matCost(st.cost))return log('Not enough materials.','err');if(p)spendPrism(p);it.affixes[ch.i]=a;log(`Chaotic Reroll${p?` (${p.name})`:''}: ${old.n} ${fmt(old.value)}${old.u} → ${a.n} ${fmt(a.value)}${a.u}.`,'ok','🔀')}
+function focused(){let st=recipeStatus('focused');if(!st.ok)return log(st.why,'err');let it=active();let p=getSelectedPrism(true);if(p===false)return;const cand=it.affixes.map((a,i)=>({a,i})).filter(x=>p.cats.includes(x.a.c));const ch=pick(cand),a=rollAffStrict(it.slot,p.cats,it.affixes.filter((_,i)=>i!==ch.i).map(x=>x.n));if(!a)return log('No valid focused reroll found.','err');if(!matCost(st.cost))return log('Not enough materials.','err');spendPrism(p);it.affixes[ch.i]=a;log(`Focused Reroll (${p.name}): ${ch.a.n} ${fmt(ch.a.value)}${ch.a.u} → ${a.n} ${fmt(a.value)}${a.u}.`,'ok','🎯')}
+function removeAff(){let st=recipeStatus('remove');if(!st.ok)return log(st.why,'err');let it=active();const p=getSelectedPrism(false);if(p===false)return;let choices=it.affixes.map((a,i)=>({a,i}));if(p?.cats)choices=choices.filter(x=>p.cats.includes(x.a.c));if(!choices.length)return log('No affix matches that prism category.','err');if(!matCost(st.cost))return log('Not enough materials.','err');if(p)spendPrism(p);const ch=pick(choices),old=it.affixes.splice(ch.i,1)[0];rarity(it);log(`Removed ${old.n}${p?` using ${p.name}`:''}.`,'warn','🧹')}
+function leg(){let st=recipeStatus('legendary');if(!st.ok)return log(st.why,'err');if(!matCost(st.cost))return log('Not enough materials.','err');active().rarity='legendary';log('Legendary upgrade complete.','ok','🔥');eventFeedback('legendary','🔥 Legendary Upgrade','The item burns with new power.','legendary')}
+function transfigure(){
+  let st=recipeStatus('transfigure');if(!st.ok)return log(st.why,'err');
+  let it=active();const p=getSelectedPrism(false);if(p===false)return;
+  const entropic=p?.id==='entropic';
+  if(!matCost(st.cost))return log('Not enough Volatile Dust.','err');
+  if(p)spendPrism(p);
+  S.tf.attempts++;if(entropic)S.tf.entropic++;else S.tf.normal++;
+  it.transfigured=true;
+  if(entropic){
+    log('Entropic Prism dampened the Cube: worst outcomes removed, but the wildest rewards are sealed away.','info','🌀');
+    toast('🌀 Entropic Transfigure','Safe, controlled, and lower-ceiling.','info');
+    let effects=chance(.75)?2:1;
+    for(let i=0;i<effects;i++)applyTransfigureEffect(it,pick(['safePower','safeBoost','safeGa']));
+    it.unmodifiable=true;log('The item is now locked by Entropic Transfiguration.','warn','🔒');render();return;
+  }
+  eventFeedback('transfigure','✨ Transfiguration','The Cube twists the item. It may bless or punish.','info');
+  let roll=rand01(),profile;
+  if(S.modifier==='unstable_cube'){
+    profile=roll<.62?'boon':roll<.80?'mixed':roll<.94?'bad':'catastrophe';
+  }else{
+    profile=roll<.68?'boon':roll<.86?'mixed':roll<.97?'bad':'catastrophe';
+  }
+  if(profile==='boon'){
+    let count=S.modifier==='unstable_cube'?ri(2,4):ri(1,3);
+    for(let i=0;i<count;i++)applyTransfigureEffect(it,pick(['power','boost','ga','ga','bonus','extraCapstone']));
+  }else if(profile==='mixed'){
+    applyTransfigureEffect(it,pick(['power','boost','ga','bonus']));
+    applyTransfigureEffect(it,pick(['removeCapstone','scramble','powerDown']));
+  }else if(profile==='bad'){
+    let count=chance(.35)?2:1;
+    for(let i=0;i<count;i++)applyTransfigureEffect(it,pick(['removeCapstone','removeAffix','scramble','powerDown','fizzle']));
+  }else{
+    applyTransfigureEffect(it,pick(['revertBase','scrambleHard','removeAffix']));
+  }
+  if(!it.affixes.length&&it.rarity!=='legendary')rarity(it);
+  if(it._revertedByCube){delete it._revertedByCube;log('The reverted base item remains modifiable, but all progress on it was lost.','warn','🧱');return;}
+  if(!chance(.0005)){it.unmodifiable=true;log('The item is now locked by Transfiguration.','warn','🔒')}
+  else{S.tf.echo++;log('MYTHIC CUBE ECHO: the item remains modifiable and may be transfigured again!','ok','🌌');eventFeedback('ga','🌌 MYTHIC CUBE ECHO','The item remains modifiable. Ridiculous luck.','mythic')}
+}
+function applyTransfigureEffect(it,effect){
+  if(!it.extraCapstones)it.extraCapstones=[];
+  const allAffs=()=>[...it.affixes,it.tempered].filter(Boolean);
+  if(effect==='safePower'||effect==='power'){
+    const gains=effect==='safePower'?[5,5,10]:[5,10,10,15,15,20,25];
+    let g=pick(gains);it.itemPower+=g;S.tf.ip=(S.tf.ip||0)+g;S.tf.success++;
+    log(`Item Power increased by +${g} to ${it.itemPower}.`,'ok','⬆️');return;
+  }
+  if(effect==='safeBoost'||effect==='boost'){
+    const b=effect==='safeBoost'?r(1.03,1.06):(S.modifier==='unstable_cube'?r(1.07,1.16):r(1.05,1.12));
+    it.valueBoost*=b;S.tf.boost++;S.tf.success++;
+    log(`All affix values surged by ${Math.round((b-1)*100)}%.`,'ok','✨');return;
+  }
+  if(effect==='safeGa'||effect==='ga'){
+    let open=allAffs().filter(a=>!a.ga);if(!open.length){applyTransfigureEffect(it,'boost');return;}
+    let max=effect==='safeGa'?1:(chance(.08)?ri(3,4):(chance(.28)?2:1));
+    let made=0;
+    while(open.length&&made<max){let a=pick(open);a.ga=true;open=open.filter(x=>x!==a);made++;}
+    S.tf.ga+=made;S.tf.success++;
+    log(`${made} affix${made===1?' became a Greater Affix':'es became Greater Affixes'}.`,'ok','⭐');return;
+  }
+  if(effect==='bonus'){
+    if(it.affixes.length<5){const a=rollAff(it.slot,null,it.affixes.map(x=>x.n));if(a){it.affixes.push(a);S.tf.bonus++;S.tf.success++;log(`Bonus affix added: ${a.n}.`,'ok','🎁');return;}}
+    applyTransfigureEffect(it,'boost');return;
+  }
+  if(effect==='extraCapstone'){
+    let a=addExtraCapstone(it);if(a){S.tf.capstone=(S.tf.capstone||0)+1;S.tf.success++;log(`Extra Capstone added: ${a.n} empowered.`,'ok','🔱');return;}
+    applyTransfigureEffect(it,'boost');return;
+  }
+  if(effect==='removeCapstone'){
+    if(removeRandomCapstone(it)){S.tf.bad=(S.tf.bad||0)+1;log('The Cube stripped away a Capstone.','warn','💀');return;}
+    applyTransfigureEffect(it,'fizzle');return;
+  }
+  if(effect==='removeAffix'){
+    if(it.affixes.length){let i=ri(0,it.affixes.length-1),old=it.affixes.splice(i,1)[0];clearCapstones(it);rarity(it);S.tf.bad=(S.tf.bad||0)+1;log(`The Cube removed ${old.n}. Capstones destabilised.`,'warn','💀');return;}
+    applyTransfigureEffect(it,'fizzle');return;
+  }
+  if(effect==='scramble'||effect==='scrambleHard'){
+    if(it.affixes.length){let count=effect==='scrambleHard'?it.affixes.length:Math.max(1,Math.floor(it.affixes.length/2));let oldNames=[];for(let i=0;i<count;i++){let idx=ri(0,it.affixes.length-1),old=it.affixes[idx];let a=rollAff(it.slot,null,it.affixes.filter((_,j)=>j!==idx).map(x=>x.n));if(a){oldNames.push(old.n);it.affixes[idx]=a;}}clearCapstones(it);S.tf.bad=(S.tf.bad||0)+1;log(`The Cube scrambled ${oldNames.length} affix${oldNames.length===1?'':'es'} and shattered Capstone stability.`,'warn','🔀');return;}
+    applyTransfigureEffect(it,'fizzle');return;
+  }
+  if(effect==='powerDown'){
+    let loss=pick([5,5,10]);it.itemPower=Math.max(850,it.itemPower-loss);S.tf.bad=(S.tf.bad||0)+1;log(`Item Power fell by -${loss} to ${it.itemPower}.`,'warn','⬇️');return;
+  }
+  if(effect==='revertBase'){
+    const fresh=makeItem(it.slot);Object.keys(it).forEach(k=>delete it[k]);Object.assign(it,fresh,{_revertedByCube:true});S.tf.bad=(S.tf.bad||0)+1;S.tf.revert=(S.tf.revert||0)+1;log('Catastrophic Transfiguration: item reverted to a Common base item. No refunds.','err','💀');eventFeedback('fizzle','💀 Catastrophic Transfigure','The item reverted to base. Brutal.', 'err');return;
+  }
+  if(effect==='fizzle'){
+    S.tf.fizzle++;log('The Cube fizzled. It happens.','warn','💀');return;
+  }
+}
+
+function allAffixesOnItem(it){return it?[...it.affixes,it.tempered].filter(Boolean):[]}
+function addOmenAffix(it,ga=false,maxAffixes=6){
+  if(!it||it.affixes.length>=maxAffixes)return null;
+  const a=rollAff(it.slot,null,it.affixes.map(x=>x.n),ga);
+  if(!a)return null;
+  it.affixes.push(a);
+  rarity(it);
+  return a;
+}
+function randomEquippedItems(){return usableSlots().map(sl=>S.gear[sl]).filter(Boolean)}
+function randomLegendaryItems(){return randomEquippedItems().filter(it=>it.rarity==='legendary')}
+function weightedPick(items){
+  const total=items.reduce((n,x)=>n+(x.weight||1),0);
+  let roll=r(0,total);
+  for(const x of items){roll-=x.weight||1;if(roll<=0)return x;}
+  return items[items.length-1];
+}
+function materialBundle(kind='dust'){
+  if(S.mode==='sandbox')return 'Casual mode already has unlimited resources.';
+  if(kind==='vault'){
+    S.mat.gold+=ri(8000,16000);S.mat.souls+=ri(250,600);S.mat.raw+=ri(300,700);S.mat.refined+=ri(20,50);S.mat.pure+=ri(1,3);S.mat.volatile+=ri(1,2);
+    ['aggressive','protector','resourceful','pragmatic','adept','chromatic'].forEach(k=>S.mat[k]+=ri(1,2));
+    return 'An ancient vault opened: gold, souls, dust and prisms spilled out.';
+  }
+  if(kind==='gold'){let g=ri(4000,9000);S.mat.gold+=g;return `Gained ${g} Gold.`;}
+  if(kind==='souls'){let s=ri(200,500);S.mat.souls+=s;return `Gained ${s} Forgotten Souls.`;}
+  let raw=ri(250,600),ref=ri(15,40),coarse=ri(15,35);S.mat.raw+=raw;S.mat.refined+=ref;S.mat.coarse+=coarse;
+  return `Gained ${raw} Raw Dust, ${coarse} Coarse Dust and ${ref} Refined Dust.`;
+}
+function freeCapstoneReroll(it){
+  const targets=capstoneTargets(it);if(!targets.length)return null;
+  const chosen=pick(targets);it.capstoneTempered=chosen.temp;it.capstoneIndex=chosen.temp?null:chosen.index;
+  return chosen.a;
+}
+function triggerForgeOmen(action='craft'){
+  const it=active(),items=randomEquippedItems(),legs=randomLegendaryItems(),affs=allAffixesOnItem(it),openGa=affs.filter(a=>!a.ga);
+  const prismKeys=['aggressive','protector','resourceful','pragmatic','adept','chromatic','entropic'];
+  const candidates=[
+    {weight:9,type:'ok',title:'Nephalem Blessing',cond:()=>items.length,apply:()=>{items.forEach(x=>x.itemPower+=5);return 'All equipped gear gained +5 Item Power.'}},
+    {weight:12,type:'ok',title:'Horadric Insight',cond:()=>!!it,apply:()=>{it.itemPower+=10;return `${itemDisplayName(it)} gained +10 Item Power.`}},
+    {weight:10,type:'ok',title:'Ancestral Spark',cond:()=>openGa.length,apply:()=>{let a=pick(openGa);a.ga=true;return `${a.n} became a Greater Affix.`}},
+    {weight:8,type:'ok',title:'Blacksmith\'s Favour',cond:()=>it&&it.rarity==='legendary'&&!it.unmodifiable&&it.mwRank<25,apply:()=>{let before=it.mwRank,g=ri(2,4);it.mwRank=Math.min(25,it.mwRank+g);return `${itemDisplayName(it)} gained ${it.mwRank-before} free Masterwork ranks.`}},
+    {weight:7,type:'ok',title:'Tempered Hands',cond:()=>it&&it.rarity==='legendary'&&it.temperCharges<3&&!it.unmodifiable,apply:()=>{it.temperCharges++;return `${itemDisplayName(it)} recovered 1 temper charge.`}},
+    {weight:8,type:'ok',title:'Prism Bloom',cond:()=>S.mode!=='sandbox',apply:()=>{['aggressive','protector','resourceful','pragmatic','adept','chromatic'].forEach(k=>S.mat[k]++);return 'Gained +1 of every category prism.'}},
+    {weight:10,type:'ok',title:'Dustfall',cond:()=>S.mode!=='sandbox',apply:()=>materialBundle('dust')},
+    {weight:8,type:'ok',title:'Golden Vein',cond:()=>S.mode!=='sandbox',apply:()=>materialBundle('gold')},
+    {weight:5,type:'ok',title:'Forgotten Offering',cond:()=>S.mode!=='sandbox',apply:()=>materialBundle('souls')},
+    {weight:7,type:'warn',title:'Greedy Cube',cond:()=>S.mode!=='sandbox'&&it&&S.mat.gold>=2000,apply:()=>{S.mat.gold-=2000;it.itemPower+=10;return `Paid 2,000 Gold. ${itemDisplayName(it)} gained +10 Item Power.`}},
+    {weight:6,type:'warn',title:'Volatile Surge',cond:()=>it&&it.temperCharges>0,apply:()=>{it.itemPower+=15;it.temperCharges--;return `${itemDisplayName(it)} gained +15 Item Power, but lost 1 temper charge.`}},
+    {weight:5,type:'warn',title:'Overheated Anvil',cond:()=>it&&it.rarity==='legendary'&&it.mwRank<25&&S.mode!=='sandbox'&&S.mat.gold>=1000,apply:()=>{S.mat.gold-=1000;let before=it.mwRank;it.mwRank=Math.min(25,it.mwRank+3);return `The anvil surged: ${itemDisplayName(it)} gained ${it.mwRank-before} Masterwork ranks, costing 1,000 Gold.`}},
+    {weight:5,type:'ok',title:'Capstone Tremor',cond:()=>it&&hasAnyCapstone(it)&&capstoneTargets(it).length,apply:()=>{let a=freeCapstoneReroll(it);return `A free Capstone tremor now empowers ${a.n}.`}},
+    {weight:5,type:'ok',title:'Ancestral Memory',cond:()=>it&&it.affixes.length<6,apply:()=>{let a=addOmenAffix(it,false,6);return a?`A memory awakened: bonus affix added (${a.n}).`:false}},
+    {weight:4,type:'ok',title:'Soul Bargain',cond:()=>S.mode!=='sandbox'&&S.mat.souls>=300&&openGa.length,apply:()=>{S.mat.souls-=300;let a=pick(openGa);a.ga=true;return `Spent 300 Forgotten Souls. ${a.n} became a Greater Affix.`}},
+    {weight:4,type:'mythic',title:'The Cube Laughs',cond:()=>it&&it.rarity==='legendary',apply:()=>{applyTransfigureEffect(it,pick(['power','boost','ga','bonus','extraCapstone']));return `A free Transfigure-style blessing struck ${itemDisplayName(it)} without forcing a lock.`}},
+    {weight:3,type:'mythic',title:'Lilith\'s Whisper',cond:()=>openGa.length>=2&&it&&!it.unmodifiable,apply:()=>{let pool=[...openGa],made=[];for(let i=0;i<2&&pool.length;i++){let a=pick(pool);a.ga=true;made.push(a.n);pool=pool.filter(x=>x!==a)}it.unmodifiable=true;it.transfigured=true;return `${made.join(' and ')} became Greater Affixes, but the item locked.`}},
+    {weight:2,type:'mythic',title:'Tyrael\'s Judgement',cond:()=>legs.length&&legs.some(x=>allAffixesOnItem(x).some(a=>!a.ga)),apply:()=>{legs.forEach(x=>x.itemPower+=5);let targets=legs.flatMap(x=>allAffixesOnItem(x).filter(a=>!a.ga));let a=pick(targets);a.ga=true;return 'All Legendary items gained +5 Item Power, and one affix became Greater.'}},
+    {weight:1,type:'mythic',title:'The Worldstone Stirs',cond:()=>items.length,apply:()=>{items.forEach(x=>x.itemPower+=10);return 'Every equipped item gained +10 Item Power.'}},
+    {weight:2,type:'mythic',title:'Ancient Vault Opens',cond:()=>S.mode!=='sandbox',apply:()=>materialBundle('vault')},
+    {weight:2,type:'warn',title:'Cube Hunger',cond:()=>S.mode!=='sandbox'&&prismKeys.some(k=>(S.mat[k]||0)>0),apply:()=>{let keys=prismKeys.filter(k=>(S.mat[k]||0)>0),k=pick(keys);S.mat[k]--;return `The Cube fed on 1 ${displayName(k)} Prism.`}},
+    {weight:1,type:'warn',title:'Cracked Temper',cond:()=>it&&it.temperCharges>0,apply:()=>{it.temperCharges--;return `${itemDisplayName(it)} lost 1 temper charge.`}},
+    {weight:1,type:'warn',title:'Fractured Capstone',cond:()=>it&&hasAnyCapstone(it),apply:()=>{removeRandomCapstone(it);return `${itemDisplayName(it)} lost one Capstone.`}}
+  ].filter(e=>e.cond());
+  if(!candidates.length)return false;
+  const event=weightedPick(candidates);
+  const result=event.apply();
+  if(!result)return false;
+  S.omens=(S.omens||0)+1;
+  log(`Forge Omen: ${event.title} — ${result}`,event.type==='warn'?'warn':'ok','🌠');
+  toast(`🌠 Forge Omen: ${event.title}`,result,event.type);
+  flash(event.type==='warn'?'capstone':'ga');
+  return true;
+}
+function maybeForgeOmen(action='craft'){
+  if(!S.runActive||S._suppressOmen)return;
+  let base=S.difficulty==='casual'?0.03:S.difficulty==='harsh'?0.015:0.025;
+  if(action==='transfigure')base+=0.03;
+  if(action==='legendary')base+=0.01;
+  if(chance(base))triggerForgeOmen(action);
+}
+function craftSignature(){return JSON.stringify({gear:S.gear,mat:S.mat,tf:S.tf})}
+function performCraft(action,fn){const before=craftSignature();fn();const after=craftSignature();if(after!==before)maybeForgeOmen(action);render()}
+function validTemperCategories(){let it=active();if(!it)return [];return CATS.filter(cat=>pool(it.slot,[cat],[]).length>0)}
+function currentTemperCategory(){let cats=validTemperCategories();let selected=$('temperCat')?.value;return cats.includes(selected)?selected:(cats[0]||'')}
+function validTemperAffixes(){let it=active();if(!it)return [];let cat=currentTemperCategory();if(!cat)return [];return pool(it.slot,[cat],[]).sort((a,b)=>a.n.localeCompare(b.n))}
+function temperStatus(){let it=active(),cats=validTemperCategories(),affs=validTemperAffixes();let ok=true,why='Ready.';if(!it){ok=false;why='No selected item.'}else if(it.unmodifiable){ok=false;why='Item is locked by Transfiguration.'}else if(!cats.length){ok=false;why='No temper categories are valid for this slot.'}else if(it.rarity!=='legendary'){ok=false;why='Tempering requires a Legendary item.'}else if(it.temperCharges<=0){ok=false;why='No temper charges left.'}else if(!affs.length){ok=false;why='No valid temper affixes for this slot/category.'}return {ok,why,affs,cats}}
+function temper(){let st=temperStatus();if(!st.ok)return log(st.why,'err');let it=active(),cat=currentTemperCategory(),forced=null;if(S.difficulty!=='harsh')forced=$('temperAffix').value||null;const a=rollAffStrict(it.slot,[cat],[],chance(.15),forced);if(!a)return log('No valid temper affix.','err');it.tempered=a;it.temperCharges--;log(`Tempered ${a.n}${a.ga?' as a Greater Affix':''}.`,'ok',a.ga?'⭐':'🛠️');if(a.ga)eventFeedback('ga','⭐ Greater Temper!',`${a.n} rolled as a Greater Affix.`, 'ok');else flash('masterwork')}
+function masterworkStatus(){let it=active(),cost=masterworkCost();let ok=true,why='Ready.';if(!it){ok=false;why='No selected item.'}else if(it.unmodifiable){ok=false;why='Item is locked by Transfiguration.'}else if(it.rarity!=='legendary'){ok=false;why='Masterwork requires a Legendary item.'}else if(it.mwRank>=25){ok=false;why='Already rank 25.'}else if(!canAfford(cost)){ok=false;why=`Need ${costText(cost)}.`}return {ok,why,cost}}
+function masterwork(){let st=masterworkStatus();if(!st.ok)return log(st.why,'err');if(!matCost(st.cost))return log(`Need ${costText(st.cost)}.`,'err');let it=active(),before=it.mwRank,g=ri(1,3);it.mwRank=Math.min(25,it.mwRank+g);log(`Masterwork: Rank ${before} → ${it.mwRank} (+${it.mwRank-before}).`,'ok','⚒️');if(it.mwRank>=25&&before<25)eventFeedback('masterwork','⚒️ Rank 25 Masterwork','Capstone is now available.','ok');else flash('masterwork')}
+function capstoneStatus(){let it=active(),cost=capstoneCost();let ok=true,why='Ready.';if(!it){ok=false;why='No selected item.'}else if(it.unmodifiable){ok=false;why='Item is locked by Transfiguration.'}else if(it.mwRank<25){ok=false;why='Capstone unlocks at rank 25.'}else if(!canAfford(cost)){ok=false;why=`Need ${costText(cost)}.`}else if((it.affixes.length+(it.tempered?1:0))===0){ok=false;why='No affixes for Capstone.'}return {ok,why,cost}}
+function capstone(){let st=capstoneStatus();if(!st.ok)return log(st.why,'err');let it=active(),had=it.capstoneIndex!==null||it.capstoneTempered;if(!matCost(st.cost))return log(`Need ${costText(st.cost)}.`,'err');let total=it.affixes.length+(it.tempered?1:0);let c=ri(0,total-1);it.capstoneTempered=c>=it.affixes.length;it.capstoneIndex=it.capstoneTempered?null:c;let a=it.capstoneTempered?it.tempered:it.affixes[c];log(`${had?'Capstone rerolled':'Capstone added'}: ${a.n} empowered${had?' again':''}.`,'ok','🔱');eventFeedback('capstone',`${had?'🔱 Capstone Rerolled':'🔱 Capstone Added'}`,`${a.n} was empowered.`, 'ok')}
+function runRecipe(){const action=S.recipe;performCraft(action,()=>({add:addAff,chaotic,focused,remove:removeAff,legendary:leg,transfigure})[action]())}
+function requestReforge(){let sl=S.activeSlot;if(!canUseSlot(sl))return log('Two-handed setup does not use an offhand.','err');let it=S.gear[sl];if(!it){S.gear[sl]=makeItem(sl);log(`${SLOT_NAMES[sl]} restored.`,'info','🧱');render();return}if(it.unmodifiable)return log('This item is locked by Transfiguration.','err');if(!canAfford({raw:50,coarse:1}))return log('Not enough materials to reforge this slot.','err');S.pendingReforge=sl;$('reforgeText').textContent=`Selected slot: ${SLOT_NAMES[sl]}. Cost: 50 Raw Dust, 1 Coarse Dust.`;$('reforgeModal').classList.add('show')}
+function confirmReforge(){let sl=S.pendingReforge;if(!sl)return;$('reforgeModal').classList.remove('show');if(S.gear[sl]?.unmodifiable){log('This item is locked by Transfiguration.','err');S.pendingReforge=null;render();return}if(!matCost({raw:50,coarse:1})){log('Not enough materials to reforge this slot.','err');S.pendingReforge=null;return}S.gear[sl]=makeItem(sl);log(`${SLOT_NAMES[sl]} reforged back to a Common base item. No refunds.`,'warn');S.pendingReforge=null;render()}
+function cancelReforge(){S.pendingReforge=null;$('reforgeModal').classList.remove('show')}
+function startGear(){S.gear={};usableSlots().forEach(sl=>S.gear[sl]=makeItem(sl));if(!canUseSlot('offhand'))S.gear.offhand=null}
+function newRun(){S.mode=modeForDifficulty(S.difficulty);S.charName=(S.charName||'').trim()||'Unnamed Hero';S.seed=(S.seed||'').trim()||makeSeed();S.rngState=hashSeed(S.seed);S.startTime=new Date().toISOString();S.runActive=true;S.activeSlot='weapon';S.recipe='add';S.prism=null;S.omens=0;S.tf={attempts:0,normal:0,entropic:0,fizzle:0,success:0,bonus:0,boost:0,ga:0,echo:0};let d=DIFF[S.difficulty],minVol=usableSlots().length+1;if(S.mode==='sandbox'){S.mat={gold:999999,souls:99999,raw:99999,coarse:9999,refined:9999,pure:999,volatile:999,aggressive:999,protector:999,resourceful:999,pragmatic:999,adept:999,chromatic:999,entropic:999}}else{let dustMult=S.modifier==='dust_flood'?1.3:1,goldMult=S.modifier==='golden_forge'?1.35:S.modifier==='dust_flood'?0.8:1,prismMult=S.modifier==='golden_forge'?0.5:S.modifier==='prism_drought'?0.35:1;S.mat={gold:scaleMaterial(d.gold,goldMult),souls:d.souls,raw:scaleMaterial(d.raw,dustMult),coarse:scaleMaterial(d.coarse,dustMult),refined:scaleMaterial(d.refined,dustMult),pure:d.pure,volatile:Math.max(d.volatile,minVol),aggressive:Math.max(0,Math.floor(d.prism*2*prismMult)),protector:Math.max(0,Math.floor(d.prism*2*prismMult)),resourceful:Math.max(0,Math.floor(d.prism*2*prismMult)),pragmatic:Math.max(0,Math.floor(d.prism*2*prismMult)),adept:Math.max(0,Math.floor(d.prism*2*prismMult)),chromatic:Math.max(0,Math.floor(d.prism*2*prismMult)),entropic:d.rare*2}}startGear();log(`Started ${difficultyLabel(S.difficulty)} ${CLASSES[S.classId]} run for ${S.charName}. Modifier: ${modifierLabel()}. Seed: ${S.seed}.`,'info','🚀');render();$('tutorial').classList.remove('show')}
+function updateDifficultyText(){let d=$('startDifficulty')?.value||S.difficulty;if($('difficultyBlurb'))$('difficultyBlurb').textContent=difficultyDescription(d);if($('seedDisplay'))$('seedDisplay').textContent=S.seed?`Seed: ${S.seed}`:'';updateModifierText()}
+function render(){clearInvalidPrism();renderControls();renderGear();renderMaterials();renderCraft();renderItem();$('totalScore').textContent=totalScore();updateDifficultyText()}
+function renderControls(){
+  if($('charDisplay'))$('charDisplay').textContent=S.charName||'Unnamed Hero';
+  if($('difficultyDisplay'))$('difficultyDisplay').textContent=difficultyLabel(S.difficulty);
+  if($('classDisplay'))$('classDisplay').textContent=CLASSES[S.classId]||displayName(S.classId);
+  if($('weaponDisplay'))$('weaponDisplay').textContent=weaponLabel(S.weaponStyle);
+  if($('modifierDisplay'))$('modifierDisplay').textContent=modifierLabel();
+  if($('temperCat')){let old=$('temperCat').value,valid=validTemperCategories();$('temperCat').innerHTML=valid.length?valid.map(c=>`<option>${c}</option>`).join(''):'<option>No valid categories</option>';$('temperCat').disabled=!valid.length;$('temperCat').value=valid.includes(old)?old:(valid[0]||'No valid categories')}
+  if($('charNameInput')&&S.charName!=='Unnamed Hero')$('charNameInput').value=S.charName;
+  if($('startModifier')){$('startModifier').innerHTML=Object.entries(MODIFIERS).map(([k,v])=>`<option value="${k}" ${S.modifier===k?'selected':''}>${v.name}</option>`).join('');$('startModifier').value=S.modifier||'none';updateModifierText()}
+  if($('seedInput')&&S.seed)$('seedInput').value=S.seed;
+  updateButtons()
+}
+function updateButtons(){let it=active(),rs=recipeStatus(S.recipe),ts=temperStatus(),ms=masterworkStatus(),cs=capstoneStatus();$('createBtn').textContent=it?'Reforge Base Item: 50 Raw + 1 Coarse':'Restore Base Item';$('createBtn').disabled=!!it&&(it.unmodifiable||!canAfford({raw:50,coarse:1}));$('transmuteBtn').disabled=!rs.ok;$('temperBtn').disabled=!ts.ok;$('mwBtn').textContent=`Masterwork: ${costText(masterworkCost())}`;$('mwBtn').disabled=!ms.ok;let hasCap=it&&(it.capstoneIndex!==null||it.capstoneTempered);$('capBtn').textContent=hasCap?`Reroll Capstone: ${costText(capstoneCost())}`:`Add Capstone: ${costText(capstoneCost())}`;$('capBtn').disabled=!cs.ok}
+function makeSlotCard(sl){let it=S.gear[sl],dis=!canUseSlot(sl),d=document.createElement('div');d.className=`gear-slot ${S.activeSlot===sl?'active':''} ${dis?'disabled':''}`;d.onclick=()=>{if(!dis){S.activeSlot=sl;render()}};d.innerHTML=`<div class="name">${SLOT_NAMES[sl]}</div><div class="item">${dis?'Disabled by 2H weapon':it?`${displayName(it.rarity)} ${it.itemType||''} · IP ${it.itemPower||ITEM_POWER_BASE} · Score ${scoreItem(it)}`:'Empty'}</div><div class="mini">${it?`<span class="tag ${it.tempered?'good':''}" title="Temper charges">🛠️ ${it.temperCharges}</span><span class="tag ${it.mwRank>=25?'warn':''}" title="Masterwork rank">⚒️ ${it.mwRank}</span>${hasAnyCapstone(it)?`<span class="tag warn" title="Capstones">🔱 ${capstoneCount(it)}</span>`:''}${it.transfigured?'<span class="tag bad" title="Transfigured">✨</span>':''}${it.unmodifiable?'<span class="tag bad" title="Locked">🔒</span>':''}`:''}</div>`;return d}
+function renderGear(){const left=$('leftSlots'),right=$('rightSlots');left.innerHTML='';right.innerHTML='';LEFT_SLOTS.forEach(sl=>left.appendChild(makeSlotCard(sl)));RIGHT_SLOTS.forEach(sl=>right.appendChild(makeSlotCard(sl)))}
+function renderMaterials(){
+  const groups=[
+    ['Core',[['gold','Gold'],['souls','Forgotten Souls']]],
+    ['Dust',[['raw','Raw Dust'],['coarse','Coarse Dust'],['refined','Refined Dust'],['pure','Pure Dust'],['volatile','Volatile Dust']]],
+    ['Prisms',[['aggressive','Aggressive Prism'],['protector','Protector Prism'],['resourceful','Resourceful Prism'],['pragmatic','Pragmatic Prism'],['adept','Adept Prism'],['chromatic','Chromatic Prism'],['entropic','Entropic Prism']]]
+  ];
+  const iconFor=k=>MAT_ICONS[k]||PRISMS.find(p=>p.id===k)?.img||'';
+  $('materials').innerHTML=groups.map(([name,items])=>`<section class="inventory-group"><h3>${name}</h3>${items.map(([k,label])=>`<div class="mat-row ${name==='Prisms'?'prism':''}" title="${label}: ${S.mat[k]??0}"><img src="${iconFor(k)}" alt=""><span>${label}</span><b>${S.mat[k]??0}</b></div>`).join('')}</section>`).join('');
+}
+function capstoneLabel(){let it=active();return it&&(it.capstoneIndex!==null||it.capstoneTempered)?'Reroll Capstone':'Add Capstone'}
+function temperChoiceLabel(){let cat=currentTemperCategory(),affs=validTemperAffixes();if(!cat)return 'No valid category';if(S.difficulty==='harsh')return `Random within ${cat}`;let selected=$('temperAffix')?.value;return affs.some(a=>a.n===selected)?selected:(affs[0]?.n||'None')}
+function previewStatusLine(title,status,extra=''){let state=status.ok?'Available':'Unavailable';let reason=status.why?`<br>${status.why}`:'';let cost=status.cost?`<br>Cost: ${costText(status.cost)}`:'';return `<strong>${title}</strong>${extra}<br>Status: <span class="${status.ok?'ok':'err'}">${state}</span>${reason}${cost}`}
+
+function renderTemperAffix(){let sel=$('temperAffix');if(!sel)return;let old=sel.value,st=temperStatus(),cat=currentTemperCategory();if(!cat){sel.innerHTML='<option>No valid affixes</option>';sel.disabled=true;return}if(S.difficulty==='harsh'){sel.innerHTML=`<option>Random within ${cat}</option>`;sel.disabled=true;return}sel.disabled=!st.affs.length;sel.innerHTML=st.affs.length?st.affs.map(a=>`<option value="${a.n}">${a.n}</option>`).join(''):'<option>No valid affixes</option>';if(st.affs.some(a=>a.n===old))sel.value=old}
+function renderCraft(){let rs=recipeStatus(S.recipe);$('recipes').innerHTML=RECIPES.map(r=>{let st=recipeStatus(r.id);return `<div class="recipe ${S.recipe===r.id?'active':''} ${!st.ok?'unavailable':''}" data-id="${r.id}"><strong>${r.name}</strong><span>${r.desc}</span></div>`}).join('');document.querySelectorAll('.recipe').forEach(e=>e.onclick=()=>{S.recipe=e.dataset.id;clearInvalidPrism();render()});$('prisms').innerHTML=PRISMS.map(p=>{let allowed=prismAllowedForRecipe(S.recipe,p);return `<div class="chip ${S.prism===p.id?'active':''} ${!allowed?'disabled':''}" data-id="${p.id}" title="${allowed?'':prismUnavailableReason(S.recipe,p)}"><img src="${p.img}">${p.name} (${S.mat[p.id]??0})</div>`}).join('')+`<div class="chip ${!S.prism?'active':''}" data-id="">No Prism</div>`;document.querySelectorAll('.chip').forEach(e=>{if(!e.classList.contains('chip'))return;e.onclick=()=>{if(e.classList.contains('disabled'))return;S.prism=e.dataset.id||null;render()}});renderTemperAffix();let it=active();$('selectedInfo').textContent=it?`${SLOT_NAMES[S.activeSlot]} · ${displayName(it.rarity)} · Temper charges ${it.temperCharges}/3 · Masterwork ${it.mwRank}/25`:'Selected slot is empty.';$('mwPips').innerHTML=Array.from({length:25},(_,i)=>{let cls=it&&i<it.mwRank?(it.mwRank===25?'gold':'on'):'';return `<div class="pip ${cls}"></div>`}).join('');let p=prismObj();$('cubePreview').innerHTML=`<strong>Selected Recipe: ${RECIPES.find(x=>x.id===S.recipe)?.name}</strong><br>Cost: ${costText(rs.cost)}<br>Prism: ${recipeUsesPrism(S.recipe)?(p?p.name:(S.recipe==='transfigure'?'None selected (Entropic optional)':'None selected')):'Disabled for this recipe'}${p&&recipeUsesPrism(S.recipe)?`<br><span class="ok">${prismRecipeNote(S.recipe,p)}</span>`:''}<hr>Status: <span class="${rs.ok?'ok':'err'}">${rs.ok?'Available':'Unavailable'}</span><br>${rs.why}`;let ts=temperStatus(),ms=masterworkStatus(),cs=capstoneStatus(),choice=temperChoiceLabel();$('blacksmithPreview').innerHTML=`<strong>Blacksmith Preview</strong><br>${previewStatusLine('Temper',ts,`<br>Choice: ${choice}`)}<hr>${previewStatusLine('Masterwork',ms)}<hr>${previewStatusLine(capstoneLabel(),cs)}`}
+function renderItem(){let it=active();$('activeTitle').textContent=`Selected: ${SLOT_NAMES[S.activeSlot]}`;if(!it){$('itemCard').className='item-card common';$('itemCard').innerHTML='<div class="item-head"><div><div class="item-name commonTxt">Empty Slot</div><div class="subtle">This slot is unexpectedly empty. Use Reforge Base Item to restore a Common base item.</div></div></div>';return}$('itemCard').className=`item-card ${it.rarity}`;let capCount=capstoneCount(it),hasCap=capCount>0;let chargeText=`${it.temperCharges} charge${it.temperCharges===1?'':'s'} remaining`;let limits=`<div class="limit-strip"><span class="${it.affixes.length>=4?'done':''}" title="Normal affixes. Most items can hold 4 before Transfigure bonuses.">✨ Affixes ${it.affixes.length}/4</span><span class="temper-limit ${it.tempered?'done':it.temperCharges?'warn':''}" title="One tempered affix slot. Rerolling consumes one charge and replaces the current temper. ${chargeText}.">🛠 Temper ${it.tempered?'1/1':'0/1'} [${chargeText}]</span><span class="${it.mwRank>=25?'done':it.mwRank>0?'warn':''}" title="Masterwork increases values. Capstone unlocks at rank 25.">⚒ MW ${it.mwRank}/25</span><span class="${hasCap?'done':''}" title="Capstones empower normal or tempered affixes by 50%. Transfiguration can add extras.">🔱 ${hasCap?`${capCount} Capstone${capCount===1?'':'s'}`:'No Capstone'}</span><span class="${it.unmodifiable?'done':''}" title="Transfigured items usually lock and cannot be modified further.">${it.unmodifiable?'🔒 Locked':'🔓 Modifiable'}</span></div>`;let meta=`<div class="item-meta"><div class="meta-chip"><b>Item Power ${it.itemPower||ITEM_POWER_BASE}</b>Score base ${fmt(itemPowerScore(it))}</div><div class="meta-chip"><b>${baseValueText(it)}</b>${it.itemType||it.slotName}</div><div class="meta-chip ${it.transfigured?'warn':''}" title="Whether this item has been transfigured by the Cube."><b>${it.transfigured?'Transfigured':'Not Transfigured'}</b>${it.valueBoost!==1?`Affix surge x${it.valueBoost.toFixed(2)}`:'Transfiguration state'}</div></div>`;$('itemCard').innerHTML=`<div class="item-head"><div><div class="item-name ${it.rarity}Txt">${itemDisplayName(it)}</div><div class="subtle">${it.className} · ${SLOT_NAMES[it.slot]} · ${it.unmodifiable?'🔒 Locked':'Modifiable'}</div></div><div class="scorebox">${scoreItem(it)}</div></div>${meta}${limits}${it.affixes.map(a=>affHtml(a,it)).join('')||'<p class="subtle">No affixes yet.</p>'}<h3>Tempered</h3>${it.tempered?affHtml(it.tempered,it,true):'<p class="subtle">No tempered affix.</p>'}`}
+function rankForScore(score){if(score>=550)return 'Mythic Forgebinder';if(score>=450)return 'Master Blacksmith';if(score>=350)return 'Horadric Artisan';if(score>=225)return 'Occultist Assistant';return 'Apprentice Smith'}
+function saveHighScore(score){const key=`hfc_${S.difficulty}_${S.classId}_${S.modifier||'none'}`;let old=Number(localStorage.getItem(key)||0);if(score>old)localStorage.setItem(key,String(score));return Math.max(score,old)}
+function finalTotals(){let tot={};usableSlots().forEach(sl=>{let it=S.gear[sl];if(it)[...it.affixes,it.tempered].filter(Boolean).forEach(a=>{let key=a.n+(a.u?' '+a.u:'');tot[key]=(tot[key]||0)+val(a,it,a===it.tempered)})});return tot}
+function affixEntries(){let entries=[];usableSlots().forEach(sl=>{let it=S.gear[sl];if(!it)return;it.affixes.forEach(a=>entries.push({it,slot:sl,a,temp:false,value:val(a,it,false)}));if(it.tempered)entries.push({it,slot:sl,a:it.tempered,temp:true,value:val(it.tempered,it,true)})});return entries}
+function sumEntries(entries,pred){return entries.filter(pred).reduce((n,e)=>n+e.value,0)}
+function sumTotalNames(tot,terms){terms=terms.map(t=>t.toLowerCase());return Object.entries(tot).filter(([k])=>terms.some(t=>k.toLowerCase().includes(t))).reduce((n,[,v])=>n+v,0)}
+function earnedBadges(score,tot){let slots=usableSlots(),items=slots.map(sl=>S.gear[sl]).filter(Boolean),entries=affixEntries(),mw25=items.filter(it=>it.mwRank>=25).length,ga=entries.filter(e=>e.a.ga).length;let armor=sumTotalNames(tot,['Armor']),life=sumTotalNames(tot,['Maximum Life']),res=sumTotalNames(tot,['Resistance']);let off=sumEntries(entries,e=>e.a.c==='Offensive'),def=sumEntries(entries,e=>e.a.c==='Defensive'),resource=sumEntries(entries,e=>e.a.c==='Resource'),mobility=sumEntries(entries,e=>e.a.c==='Mobility'),utility=sumEntries(entries,e=>e.a.c==='Utility'),skill=sumEntries(entries,e=>e.a.c==='Skill'),crit=sumTotalNames(tot,['Critical Strike Chance','Critical Strike Damage']),cdr=sumTotalNames(tot,['Cooldown Reduction']);let transformed=items.filter(it=>it.transfigured).length,normalTrans=S.tf?.normal||0,entropicTrans=S.tf?.entropic||0,attempts=S.tf?.attempts||0,fizzles=S.tf?.fizzle||0;let itemScores=items.map(it=>({it,score:scoreItem(it)})).sort((a,b)=>b.score-a.score),topItem=itemScores[0],offhandScore=S.gear.offhand?scoreItem(S.gear.offhand):-1,ringLord=['ring1','ring2'].every(sl=>{let it=S.gear[sl];return it&&it.rarity==='legendary'&&it.tempered&&scoreItem(it)>=40});let classTerms={barbarian:['Bleed','Berserking','Brawling','Fury','Barbarian'],sorcerer:['Pyromancy','Frost','Shock','Mana','Sorcerer'],rogue:['Imbuement','Marksman','Trap','Energy','Rogue'],necromancer:['Bone','Shadow','Minion','Essence','Necromancer'],druid:['Shapeshifting','Nature Magic','Companion','Spirit Generation','Druid'],spiritborn:['Eagle','Jaguar','Vigor','Spiritborn'],paladin:['Holy','Justice','Aura','Faith','Consecrated','Paladin'],warlock:['Hellfire','Abyss','Occult','Demon','Shadowform','Dominance','Warlock']};let classBadge={barbarian:['Bleed the World','Stack Barbarian-flavoured power across the build.'],sorcerer:['Elemental Overload','Stack Sorcerer elemental power across the build.'],rogue:['Knife in the Dark','Stack Rogue precision, traps or imbuement power.'],necromancer:['Bone Collector','Stack Necromancer bone, shadow, minion or essence power.'],druid:['Wildheart','Stack Druid nature, shapeshifting or companion power.'],spiritborn:['Avatar of the Hunt','Stack Spiritborn spirit guardian power.'],paladin:['Lightbringer','Stack Paladin holy, justice, aura or faith power.'],warlock:['Pact Sealed','Stack Warlock hellfire, abyss, occult or demon power.']};let classPower=sumTotalNames(tot,classTerms[S.classId]||[]);let defs=[
+['Iron Wall','Reach 6,000+ total Armor value.',armor>=6000],
+['Blood Reservoir','Reach 8,000+ Maximum Life.',life>=8000],
+['Glass Cannon','Reach 500+ Offensive total.',off>=500],
+['Prismatic Ward','Reach 1,500+ Resistance total.',res>=1500],
+['Swiftblade','Reach 100+ Mobility total.',mobility>=100],
+['Endless Engine','Reach 150+ Resource total.',resource>=150],
+['Skill Savant','Reach 10+ Skill-rank total.',skill>=10],
+['Critical Mass','Reach 200+ combined Critical totals.',crit>=200],
+['Time Thief','Reach 25+ Cooldown Reduction.',cdr>=25],
+['Perfected Forge','Finish with at least 3 Rank 25 items.',mw25>=3],
+['Fully Forged','Upgrade every usable slot to Legendary.',slots.every(sl=>S.gear[sl]?.rarity==='legendary')],
+['Complete Arsenal','Every usable slot is Legendary with 4+ affixes and a temper.',slots.every(sl=>{let it=S.gear[sl];return it&&it.rarity==='legendary'&&it.affixes.length>=4&&it.tempered})],
+['Greater Touch','Finish with at least 5 Greater Affixes.',ga>=5],
+['Greater Hoarder','Finish with at least 10 Greater Affixes.',ga>=10],
+['Horadric Legend','Reach 525+ total Gear Score.',score>=525],
+['Transmuted Fate','Use Transfiguration on at least one item.',transformed>=1],
+['No Refunds Given','Transfigure every usable gear slot.',transformed>=slots.length],
+['Cube Survivor','Land 5+ non-fizzle Transfiguration outcomes.',(S.tf?.success||0)>=5],
+['The Cube Betrayed Me','At least half of 3+ Transfigures fizzled.',attempts>=3&&fizzles/attempts>=0.5],
+['Nothing But Ashes','Suffer 3+ Transfiguration fizzles in one run.',fizzles>=3],
+['Echo-Touched','Trigger a Mythic Cube Echo.',(S.tf?.echo||0)>0],
+['Stable Matter','Use Entropic Prism on 3+ Transfigures.',entropicTrans>=3],
+['Chaos Addict','Use normal Transfigure on every usable slot.',normalTrans>=slots.length],
+['Bonus Hunter','Add 2+ bonus affixes through Transfiguration.',(S.tf?.bonus||0)>=2],
+['One Good Item','One item carries at least 35% of your score.',topItem&&score>=150&&topItem.score>=score*0.35],
+['The Offhand Carry','Offhand is your highest-scoring item.',S.weaponStyle==='onehand'&&S.gear.offhand&&offhandScore>=0&&topItem&&topItem.it.slot==='offhand'],
+['Ring Lord','Both rings are Legendary, tempered, and score 40+.',ringLord],
+['Oops, All Defense','Defensive total is at least double Offensive total.',def>=500&&def>=off*2],
+['Paper Armor','Huge offense, but low Armor and Life.',off>=500&&armor<2500&&life<3000],
+['Balanced Forge','Reach strong Offensive, Defensive, and Resource totals.',off>=250&&def>=250&&resource>=80],
+['Apprentice’s Luck','Low score, but still earned a rare-feeling badge.',score<220&&((S.tf?.echo||0)>0||ga>=5||mw25>=3)]
+];let cb=classBadge[S.classId];if(cb)defs.push([cb[0],cb[1],classPower>=180]);return defs.map(([name,desc,earned])=>({name,desc,earned}))}
+
+function buildRunFlavour(score,badges,tot){
+  const earned=badges.filter(b=>b.earned).map(b=>b.name);
+  const entries=affixEntries();
+  const off=sumEntries(entries,e=>e.a.c==='Offensive'),def=sumEntries(entries,e=>e.a.c==='Defensive'),resource=sumEntries(entries,e=>e.a.c==='Resource'),mobility=sumEntries(entries,e=>e.a.c==='Mobility');
+  const attempts=S.tf?.attempts||0,fizzles=S.tf?.fizzle||0;
+  const classWords={
+    barbarian:['furious','blood-soaked','loud enough to count as strategy'],
+    sorcerer:['elemental','overcharged','one spark away from a lawsuit'],
+    rogue:['sharp','sneaky','professionally unfair'],
+    necromancer:['grim','bone-rattling','socially unacceptable'],
+    druid:['wild','storm-touched','covered in suspicious leaves'],
+    spiritborn:['feral','spirit-led','moving faster than good judgement'],
+    paladin:['righteous','radiant','aggressively judgemental'],
+    warlock:['sinister','contractually questionable','dripping with bad decisions']
+  };
+  let words=[];
+  if(score>=750)words.push('legendary','terrifyingly efficient');
+  else if(score>=550)words.push('powerful','well-forged');
+  else if(score>=350)words.push('scrappy','respectable');
+  else words.push('tragic','educational');
+  if(off>=def*1.4&&off>250)words.push('reckless','explosive');
+  if(def>=off*1.4&&def>250)words.push('stubborn','ironclad');
+  if(resource>=120)words.push('fuelled by endless resources');
+  if(mobility>=90)words.push('alarmingly quick');
+  if(attempts>=3&&fizzles/attempts>=0.5)words.push('betrayed by the Cube','full of regret');
+  if(earned.length>=8)words.push('decorated','suspiciously competent');
+  const clsWords=classWords[S.classId]||['strange','memorable','slightly cursed'];
+  const classFlavour=clsWords[0];
+  words.push(...clsWords);
+  const picked=[];
+  for(const w of words){if(!picked.includes(w)&&w!==classFlavour)picked.push(w);if(picked.length>=2)break}
+  picked.push(classFlavour);
+  while(picked.length<3)picked.push(['questionable','chaotic','memorable'][picked.length]);
+  return `${S.charName} completed a ${difficultyLabel(S.difficulty)} ${CLASSES[S.classId]} run that was ${picked[0]}, ${picked[1]} and ${picked[2]}.`;
+}
+
+
+function closeStartModal(){if(S.runActive||S.startTime){$('tutorial').classList.remove('show')}else{toast('Start a run','Choose your setup and begin forging first.','warn')}}
+function completionWarnings(){let slots=usableSlots(),items=slots.map(sl=>S.gear[sl]).filter(Boolean);let notLegendary=slots.filter(sl=>S.gear[sl]?.rarity!=='legendary').length,missingTemp=slots.filter(sl=>!S.gear[sl]?.tempered).length,underAffix=slots.filter(sl=>(S.gear[sl]?.affixes.length||0)<4).length,underMw=slots.filter(sl=>(S.gear[sl]?.mwRank||0)<25).length,noGold=(S.mat.gold||0)<Math.min(masterworkCost().gold,capstoneCost().gold);let canMW=slots.some(sl=>{let it=S.gear[sl];return it&&it.rarity==='legendary'&&!it.unmodifiable&&it.mwRank<25&&canAfford(masterworkCost())});let canCap=slots.some(sl=>{let it=S.gear[sl];return it&&it.rarity==='legendary'&&!it.unmodifiable&&it.mwRank>=25&&canAfford(capstoneCost())&&(it.affixes.length+(it.tempered?1:0)>0)});let canCube=slots.some(sl=>{let old=S.activeSlot;S.activeSlot=sl;let ok=['add','chaotic','focused','remove','legendary','transfigure'].some(id=>{let oldR=S.recipe;S.recipe=id;let st=recipeStatus(id);S.recipe=oldR;return st.ok});S.activeSlot=old;return ok});let warnings=[];if(notLegendary)warnings.push(`${notLegendary} usable slot${notLegendary===1?' is':'s are'} not Legendary.`);if(missingTemp)warnings.push(`${missingTemp} slot${missingTemp===1?' is':'s are'} missing a Temper.`);if(underAffix)warnings.push(`${underAffix} slot${underAffix===1?' has':'s have'} fewer than 4 normal affixes.`);if(underMw)warnings.push(`${underMw} slot${underMw===1?' is':'s are'} below Masterwork 25.`);if(noGold&&!canMW&&!canCap)warnings.push('Gold is too low for further Masterwork or Capstone progress.');else{if(canMW)warnings.push('At least one item can still be Masterworked.');if(canCap)warnings.push('At least one item can still receive or reroll a Capstone.')}if(canCube)warnings.push('Some Cube actions may still be possible if you want to keep gambling.');return warnings}
+function requestComplete(){let warnings=completionWarnings();$('completeWarnings').innerHTML=warnings.length?`<p>This run may still have room to improve:</p><ul>${warnings.map(w=>`<li>${w}</li>`).join('')}</ul><p>Complete anyway?</p>`:'<p>This build looks broadly complete. Ready to score it?</p>';$('completeModal').classList.add('show')}
+function confirmComplete(){$('completeModal').classList.remove('show');result(true)}
+function cancelComplete(){$('completeModal').classList.remove('show')}
+function itemProgress(it){if(!it)return {legend:false,aff:false,temp:false,mw:false,cap:false,locked:false};return {legend:it.rarity==='legendary',aff:it.affixes.length>=4,temp:!!it.tempered,mw:it.mwRank>=25,cap:hasAnyCapstone(it),locked:!!it.unmodifiable}}
+function slotProgressHtml(){return `<div class="progress-grid">${usableSlots().map(sl=>{let it=S.gear[sl],p=itemProgress(it);return `<div class="progress-card"><b>${SLOT_NAMES[sl]} · ${it?scoreItem(it):0}</b><div class="progress-icons"><span class="${p.legend?'done':''}" title="Legendary item">🔥 Leg</span><span class="${p.aff?'done':''}" title="Four normal affixes">✨ ${it?it.affixes.length:0}/4</span><span class="${p.temp?'done':''}" title="Tempered affix applied">🛠 Temp</span><span class="${p.mw?'done':it&&it.mwRank>0?'warn':''}" title="Masterwork rank">⚒ ${it?it.mwRank:0}/25</span><span class="${p.cap?'done':''}" title="Capstone active">🔱 ${it?capstoneCount(it):0}</span><span class="${p.locked?'warn':''}" title="Transfigure lock">${p.locked?'🔒 Locked':'🔓 Open'}</span></div></div>`}).join('')}</div>`}
+function nextRankTarget(score){const targets=[['Occultist Assistant',220],['Horadric Artisan',380],['Master Blacksmith',525],['Mythic Forgebinder',675]];return targets.find(t=>score<t[1])||null}
+function topItemInfo(){let list=usableSlots().map(sl=>({slot:sl,it:S.gear[sl],score:scoreItem(S.gear[sl])})).filter(x=>x.it).sort((a,b)=>b.score-a.score);let top=list[0];if(!top)return {line:'No item',html:'<p class="subtle">No item data found.</p>'};let affs=[...top.it.affixes,top.it.tempered].filter(Boolean).sort((a,b)=>val(b,top.it,b===top.it.tempered)-val(a,top.it,a===top.it.tempered)).slice(0,2).map(a=>a.n).join(', ');let reasons=[];if(top.it.mwRank>=25)reasons.push('Rank 25');if(hasAnyCapstone(top.it))reasons.push(`${capstoneCount(top.it)} Capstone${capstoneCount(top.it)===1?'':'s'}`);if([...top.it.affixes,top.it.tempered].filter(Boolean).some(a=>a.ga))reasons.push('Greater Affix');if(top.it.transfigured)reasons.push('Transfigured');let line=`${top.it.itemType||SLOT_NAMES[top.slot]} (${top.score})`;return {line,html:`<div class="identity-box"><b>${itemDisplayName(top.it)}</b><br>Item Power: <b>${top.it.itemPower||ITEM_POWER_BASE}</b> · Score: <b>${top.score}</b>${affs?`<br>Key affixes: ${affs}`:''}${reasons.length?`<br>Highlights: ${reasons.join(', ')}`:''}</div>`}}
+function buildIdentity(tot){let entries=affixEntries();let sums={Offensive:sumEntries(entries,e=>e.a.c==='Offensive'),Defensive:sumEntries(entries,e=>e.a.c==='Defensive'),Resource:sumEntries(entries,e=>e.a.c==='Resource'),Mobility:sumEntries(entries,e=>e.a.c==='Mobility'),Utility:sumEntries(entries,e=>e.a.c==='Utility'),Skill:sumEntries(entries,e=>e.a.c==='Skill'),Resistance:sumEntries(entries,e=>e.a.c==='Resistance')};let topCats=Object.entries(sums).sort((a,b)=>b[1]-a[1]).filter(x=>x[1]>0);let main=topCats[0]?.[0]||'Mixed';let second=topCats[1]?.[0]||'';let label=`${main}${second&&topCats[1][1]>topCats[0][1]*0.55?` / ${second}`:''} ${CLASSES[S.classId]}`;let strengths=Object.entries(tot).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>summaryAffixLine(k,v));let low=[];if((sums.Mobility||0)<50)low.push('Mobility');if((sums.Resource||0)<60)low.push('Resource');if((sums.Defensive||0)<180)low.push('Defence');return {label,html:`<div class="identity-box"><b>${label}</b><br>Main strengths: ${strengths.join(' · ')||'No clear stat focus yet.'}${low.length?`<br>Potential weakness: ${low.slice(0,2).join(', ')}`:''}</div>`}}
+function almostBadges(score,tot,earnedNames){let entries=affixEntries();let slots=usableSlots(),items=slots.map(sl=>S.gear[sl]).filter(Boolean);let armor=sumTotalNames(tot,['Armor']),life=sumTotalNames(tot,['Maximum Life']),res=sumTotalNames(tot,['Resistance']),off=sumEntries(entries,e=>e.a.c==='Offensive'),def=sumEntries(entries,e=>e.a.c==='Defensive'),resource=sumEntries(entries,e=>e.a.c==='Resource'),mobility=sumEntries(entries,e=>e.a.c==='Mobility'),skill=sumEntries(entries,e=>e.a.c==='Skill'),crit=sumTotalNames(tot,['Critical Strike Chance','Critical Strike Damage']),cdr=sumTotalNames(tot,['Cooldown Reduction']),ga=entries.filter(e=>e.a.ga).length,mw25=items.filter(it=>it.mwRank>=25).length,trans=items.filter(it=>it.transfigured).length;let candidates=[['Horadric Legend',score,525,'score'],['Iron Wall',armor,6000,'Armor'],['Blood Reservoir',life,8000,'Life'],['Glass Cannon',off,500,'Offensive'],['Prismatic Ward',res,1500,'Resistance'],['Swiftblade',mobility,100,'Mobility'],['Endless Engine',resource,150,'Resource'],['Skill Savant',skill,10,'Skill ranks'],['Critical Mass',crit,200,'Critical'],['Time Thief',cdr,25,'Cooldown Reduction'],['Perfected Forge',mw25,3,'Rank 25 items'],['Greater Touch',ga,5,'Greater Affixes'],['Greater Hoarder',ga,10,'Greater Affixes'],['No Refunds Given',trans,slots.length,'Transfigured slots']];return candidates.filter(([name,have,need])=>!earnedNames.has(name)&&have>0&&have<need&&have/need>=0.65).sort((a,b)=>(b[1]/b[2])-(a[1]/a[2])).slice(0,4).map(([name,have,need,unit])=>({name,have,need,unit}))}
+function historyKey(){return 'hfc_run_history_v1'}
+function loadRunHistory(){try{return JSON.parse(localStorage.getItem(historyKey())||'[]')}catch(e){return []}}
+function saveRunHistory(run){let h=loadRunHistory();run.id=run.id||`${S.startTime||Date.now()}_${S.seed}`;let idx=h.findIndex(x=>x.id===run.id);if(idx>=0)h[idx]=run;else h.unshift(run);localStorage.setItem(historyKey(),JSON.stringify(h.slice(0,12)))}
+function historyHtml(){let h=loadRunHistory();if(!h.length)return '<p class="subtle">No completed runs saved yet. Your last 12 completed builds will appear here.</p>';return `<table class="table"><tr><th>Date</th><th>Hero</th><th>Class</th><th>Mode</th><th>Score</th><th>Badges</th><th>Seed</th></tr>${h.map(r=>`<tr><td>${r.date}</td><td>${r.charName}</td><td>${r.className}</td><td>${r.difficulty} · ${r.modifier}</td><td>${r.score}</td><td>${r.badges}</td><td>${r.seed}</td></tr>`).join('')}</table><p class="tiny">History is stored locally in this browser only.</p>`}
+
+function copySummary(){navigator.clipboard?.writeText(window.lastSummary||'').then(()=>{log('Discord summary copied to clipboard.','ok');toast('Discord summary copied','Ready to paste.','ok')}).catch(()=>{log('Could not copy summary automatically.','warn');toast('Copy failed','Your browser blocked clipboard access.','warn')})}
+function summaryAffixLine(k,v){return k.endsWith(' %')?`${k.slice(0,-2)} ${fmt(v)}%`:`${k} ${fmt(v)}`}
+function cleanDiscordText(v){return String(v||'').replace(/[`*_~|>]/g,'').trim()||'Unnamed Hero'}
+function buildDiscordSummary(score,rank,best,badges,sorted,flavour){
+  const earned=badges.filter(b=>b.earned).map(b=>b.name);
+  const badgeLine=earned.length?earned.slice(0,5).map(b=>`**${b}**`).join(', '):'No badges yet';
+  const topStats=sorted.slice(0,3).map(([k,v])=>summaryAffixLine(k,v)).join(' · ')||'No affix totals';
+  const weapon=S.weaponStyle==='twohand'?'2H Weapon':'1H + Offhand';
+  const identity=buildIdentity(Object.fromEntries(sorted)).label;
+  const mvp=topItemInfo().line;
+  return `## ⬦ Horadric Forge Challenge ⬦
+**${cleanDiscordText(S.charName)}** the **${CLASSES[S.classId]}** forged a **${rank}** build.
+
+**Score:** **${score}**${best>score?` *(Best: ${best})`:''} · **Badges:** **${earned.length}/${badges.length}** · **${difficultyLabel(S.difficulty)}** · **${modifierLabel()}** · **${weapon}**
+**Seed:** \`${S.seed}\` · **Build:** ${identity} · **MVP:** ${mvp}
+
+_${flavour}_
+
+🏅 ${badgeLine}
+🔥 **Top stats:** ${topStats}
+
+Think your build can beat this seed?`;
+}
+function selectResultTab(tab){
+  if(!window.resultTabHtml)return;
+  document.querySelectorAll('.result-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  const box=$('resultTabContent');
+  if(box)box.innerHTML=window.resultTabHtml[tab]||'<p class="subtle">No data for this tab.</p>';
+}
+function result(saveHistory=true){
+  let rows=[],tot=finalTotals();
+  usableSlots().forEach(sl=>{let it=S.gear[sl];let p=itemProgress(it);rows.push(`<tr><td>${SLOT_NAMES[sl]}</td><td>${it?itemDisplayName(it):'Empty'}</td><td>${it?it.itemPower||ITEM_POWER_BASE:'-'}</td><td>${scoreItem(it)}</td><td>${it?it.affixes.length:0}/4</td><td>${it?it.mwRank+'/25':'-'}</td><td>${it?.tempered?'Yes':'No'}</td><td>${it?capstoneCount(it):0}</td></tr>`)});
+  let sorted=Object.entries(tot).sort((a,b)=>b[1]-a[1]).slice(0,40),score=totalScore(),rank=rankForScore(score),best=saveHighScore(score),mw25=usableSlots().filter(sl=>S.gear[sl]?.mwRank>=25).length,badges=earnedBadges(score,tot),earned=badges.filter(b=>b.earned),earnedNames=new Set(earned.map(b=>b.name));
+  let start=S.startTime?new Date(S.startTime).toLocaleString():'Unknown',flavour=buildRunFlavour(score,badges,tot),next=nextRankTarget(score),mvp=topItemInfo(),identity=buildIdentity(tot),almost=almostBadges(score,tot,earnedNames);
+  window.lastSummary=buildDiscordSummary(score,rank,best,badges,sorted,flavour);
+  if(saveHistory)saveRunHistory({id:`${S.startTime}_${S.seed}`,date:new Date().toLocaleDateString(),charName:S.charName,className:CLASSES[S.classId],difficulty:difficultyLabel(S.difficulty),modifier:modifierLabel(),score,rank,badges:`${earned.length}/${badges.length}`,seed:S.seed,summary:window.lastSummary});
+  let nextHtml=next?`<div class="identity-box"><b>Next Rank Target</b><br>${next[0]} at <b>${next[1]}</b>. You are <b>${next[1]-score}</b> points away.<br>Horadric Legend badge: ${score>=525?'earned':'needed '+Math.max(0,525-score)+' more points'}.</div>`:`<div class="identity-box"><b>Top Rank Reached</b><br>You reached the highest rank tier. Horadric Legend badge: ${score>=525?'earned':'needed '+Math.max(0,525-score)+' more points'}.</div>`;
+  let almostHtml=almost.length?`<ul>${almost.slice(0,5).map(b=>`<li><b>${b.name}</b>: ${fmt(b.have)} / ${fmt(b.need)} ${b.unit}</li>`).join('')}</ul>`:`<p class="subtle">No close near-misses found. Either you earned the nearby badges, or the next ones need a different build direction.</p>`;
+  let topStatsHtml=sorted.slice(0,5).length?`<div class="badge-chip-list">${sorted.slice(0,5).map(([k,v])=>`<span class="badge-chip dim">${summaryAffixLine(k,v)}</span>`).join('')}</div>`:'<p class="subtle">No affix totals yet.</p>';
+  let earnedShort=earned.length?`<div class="badge-chip-list">${earned.slice(0,12).map(b=>`<span class="badge-chip">🏅 ${b.name}</span>`).join('')}${earned.length>12?`<span class="badge-chip dim">+${earned.length-12} more</span>`:''}</div>`:'<p class="subtle">No badges earned yet.</p>';
+  let gearTable=`<table class="result-table-compact"><tr><th>Slot</th><th>Item</th><th>IP</th><th>Score</th><th>Affixes</th><th>MW</th><th>Temp</th><th>Cap</th></tr>${rows.join('')}</table>`;
+  let affixGrid=sorted.length?`<div class="affix-chip-grid">${sorted.slice(0,18).map(([k,v],i)=>`<div class="affix-chip"><b>${i+1}. ${k}</b><span>${fmt(v)}</span></div>`).join('')}</div>${sorted.length>18?`<p class="tiny">Showing top 18 affix totals. Copy summary uses the top 3.</p>`:''}`:'<p class="subtle">No affix totals yet.</p>';
+  let badgeFullHtml=earned.length?`<div class="badge-mini-grid">${earned.slice(0,24).map(b=>`<div class="badge-mini"><b>🏅 ${b.name}</b><span>${b.desc}</span></div>`).join('')}</div>${earned.length>24?`<p class="tiny">${earned.length-24} more badge(s) earned but hidden to keep the result screen compact.</p>`:''}`:`<p class="subtle">No badges earned this run. The Cube remains unimpressed.</p>`;
+  let history=loadRunHistory();
+  let historyCompact=history.length?`<table class="result-table-compact"><tr><th>Date</th><th>Hero</th><th>Class</th><th>Mode</th><th>Score</th><th>Badges</th><th>Seed</th></tr>${history.slice(0,8).map(r=>`<tr><td>${r.date}</td><td>${r.charName}</td><td>${r.className}</td><td>${r.difficulty} · ${r.modifier}</td><td>${r.score}</td><td>${r.badges}</td><td>${r.seed}</td></tr>`).join('')}</table><p class="tiny">Showing latest 8 runs. History is stored locally in this browser only.</p>`:'<p class="subtle">No completed runs saved yet. Your completed builds will appear here.</p>';
+  let overviewHtml=`<div class="result-page two-col"><div class="result-card"><h3>Run Snapshot</h3>${nextHtml}<h3>Build Identity</h3>${identity.html}<h3>MVP Item</h3>${mvp.html}</div><div class="result-card"><h3>Top Stats</h3>${topStatsHtml}<h3 style="margin-top:10px">Almost Badges</h3>${almostHtml}<h3 style="margin-top:10px">Earned Badges</h3>${earnedShort}</div></div>`;
+  let gearHtml=`<div class="result-page two-col"><div class="result-card compact"><h3>Gear Summary</h3>${gearTable}</div><div class="result-card compact"><h3>Slot Progress</h3>${slotProgressHtml()}</div></div>`;
+  let affixHtml=`<div class="result-page"><div class="result-card"><h3>Affix Totals</h3>${affixGrid}</div></div>`;
+  let badgesHtml=`<div class="result-page two-col"><div class="result-card"><h3>Almost Badges</h3>${almostHtml}</div><div class="result-card"><h3>Earned Badges</h3>${badgeFullHtml}</div></div>`;
+  let historyHtml2=`<div class="result-page"><div class="result-card"><h3>Run History</h3>${historyCompact}</div></div>`;
+  window.resultTabHtml={overview:overviewHtml,gear:gearHtml,affixes:affixHtml,badges:badgesHtml,history:historyHtml2};
+  $('resultBox').classList.add('result-wide');
+  $('resultBox').innerHTML=`<div class="result-topline"><div><h2>Build Complete: ${S.charName}</h2><div class="subtle">${CLASSES[S.classId]} · ${difficultyLabel(S.difficulty)} · ${modifierLabel()} · Seed: <b>${S.seed}</b></div></div><div class="result-meta"><div class="rank-title">${rank}</div><div class="subtle">Started ${start}</div></div></div><div class="share">${flavour}</div><div class="stat-strip"><div class="stat-box"><b>${score}</b>Gear Score</div><div class="stat-box"><b>${best}</b>Best Saved</div><div class="stat-box"><b>${earned.length}/${badges.length}</b>Badges</div><div class="stat-box"><b>${mw25}</b>Rank 25 Items</div></div><div class="result-browser"><div class="result-menu"><div class="result-menu-title">Result Sections</div><button class="result-tab active" data-tab="overview" onclick="selectResultTab('overview')">Overview</button><button class="result-tab" data-tab="gear" onclick="selectResultTab('gear')">Gear Summary</button><button class="result-tab" data-tab="affixes" onclick="selectResultTab('affixes')">Affix Totals</button><button class="result-tab" data-tab="badges" onclick="selectResultTab('badges')">Badges</button><button class="result-tab" data-tab="history" onclick="selectResultTab('history')">Run History</button></div><div class="result-content" id="resultTabContent">${window.resultTabHtml.overview}</div></div><div class="result-footer"><button class="btn" onclick="copySummary()">Copy Discord Summary</button><button class="btn secondary" onclick="copySeed()">Copy Seed</button><button class="btn secondary" onclick="document.getElementById('resultModal').classList.remove('show')">Return</button><button class="btn secondary" onclick="document.getElementById('resultModal').classList.remove('show');syncStartChoices();document.getElementById('tutorial').classList.add('show')">Play Again</button></div>`;
+  $('resultModal').classList.add('show');
+  if(earned.length)toast('🏅 Badges Revealed',`${earned.length}/${badges.length} earned this run.`,'ok')
+}
+function syncStartChoices(){if($('cancelStartBtn')){$('cancelStartBtn').style.display=(S.runActive||S.startTime)?'inline-block':'none';}if($('startClass')){$('startClass').innerHTML=Object.entries(CLASSES).map(([k,v])=>`<option value="${k}" ${S.classId===k?'selected':''}>${v}</option>`).join('');$('startClass').value=S.classId}$('startDifficulty').value=S.difficulty;$('startWeaponStyle').value=S.weaponStyle;if($('startModifier')){$('startModifier').innerHTML=Object.entries(MODIFIERS).map(([k,v])=>`<option value="${k}">${v.name}</option>`).join('');$('startModifier').value=S.modifier||'none'}updateModifierText();if($('charNameInput'))$('charNameInput').value=S.charName==='Unnamed Hero'?'':S.charName;updateDifficultyText()}
+function init(){syncStartChoices();render();$('tutorial').classList.add('show')}
+
+document.getElementById('beginBtn').addEventListener('click',()=>{S.classId=document.getElementById('startClass').value;S.difficulty=document.getElementById('startDifficulty').value;S.weaponStyle=document.getElementById('startWeaponStyle').value;S.modifier=document.getElementById('startModifier').value||'none';S.charName=(document.getElementById('charNameInput').value||'').trim()||'Unnamed Hero';S.seed=(document.getElementById('seedInput').value||'').trim();newRun()});
+document.getElementById('startBtn').addEventListener('click',()=>{syncStartChoices();document.getElementById('tutorial').classList.add('show')});
+document.getElementById('copySeedBtn').addEventListener('click',copySeed);
+document.getElementById('randomSeedBtn').addEventListener('click',fillRandomSeed);
+document.getElementById('createBtn').addEventListener('click',requestReforge);
+document.getElementById('confirmReforgeBtn').addEventListener('click',confirmReforge);
+document.getElementById('cancelReforgeBtn').addEventListener('click',cancelReforge);
+document.getElementById('transmuteBtn').addEventListener('click',runRecipe);
+document.getElementById('temperBtn').addEventListener('click',()=>performCraft('temper',temper));
+document.getElementById('mwBtn').addEventListener('click',()=>performCraft('masterwork',masterwork));
+document.getElementById('capBtn').addEventListener('click',()=>performCraft('capstone',capstone));
+document.getElementById('completeBtn').addEventListener('click',requestComplete);
+document.getElementById('confirmCompleteBtn').addEventListener('click',confirmComplete);
+document.getElementById('cancelCompleteBtn').addEventListener('click',cancelComplete);
+document.getElementById('cancelStartBtn').addEventListener('click',closeStartModal);
+document.getElementById('helpBtn').addEventListener('click',()=>document.getElementById('helpModal').classList.add('show'));
+document.getElementById('startDifficulty').addEventListener('change',updateDifficultyText);
+document.getElementById('startModifier').addEventListener('change',e=>{S.modifier=e.target.value;updateModifierText()});
+document.getElementById('temperCat').addEventListener('change',render);
+init();
+</script>
+</body>
+</html>
